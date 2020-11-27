@@ -1,14 +1,23 @@
 <template>
-<div>
-  <p>App...</p>
-</div>
+  <div>
+    <Header />
+    <!-- 显示加载的组件 -->
+    <router-view></router-view>
+    <Footer />
+  </div>
 </template>
 
 <script>
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 export default {
   name: "App",
+  components: {
+    Header,
+    Footer,
+  },
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 </style>
