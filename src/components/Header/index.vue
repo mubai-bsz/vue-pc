@@ -1,22 +1,148 @@
 <template>
   <div class="header">
-    header...
-    <p>head></p>
+    <div>
+      <div class="header-top">
+        <div class="header-main">
+          <div class="header-left">
+            <p>尚品汇欢迎您！</p>
+            请<router-link to="/login">登录</router-link>
+            <router-link to="/register">免费注册</router-link>
+          </div>
+          <div class="header-right">
+            <a href="###">我的订单</a>
+            <a href="###">我的购物车</a>
+            <a href="###">我的尚品汇</a>
+            <a href="###">尚品汇会员</a>
+            <a href="###">企业采购</a>
+            <a href="###">关于尚品汇</a>
+            <a href="###">合作招商</a>
+            <a href="###">商家后台</a>
+          </div>
+        </div>
+      </div>
+      <div class="header-bottom">
+        <router-link to="/">
+          <img src="./images/logo.png" alt="" />
+        </router-link>
+        <div class="header-search">
+          <input type="text" class="input" />
+          <button class="btn" @click="push">搜索</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Home from "../../views/Home";
+import Login from "../../views/Login";
+import Register from "../../views/Register";
+import Search from "../../views/Search";
 export default {
   name: "Header",
+  methods:{
+    push(){
+      this.$router.push('/search')
+    }
+  },
+  component: {
+    Home,
+    Login,
+    Register,
+    Search,
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.header {
-  background-color: violet;
+.header-top {
+  height: 30px;
+  width: 100%;
+  line-height: 30px;
+  color: #666;
+  background-color: #eaeaea;
+
+  .header-main {
+    width: 1200px;
+    margin: 0 auto;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    a:hover {
+      color: blue;
+      text-decoration: none;
+    }
+  }
+}
+.header-left {
+  display: flex;
   p {
-    font-size: 33px;
-    
+    margin: 0 10px 0 0;
+  }
+  a {
+    padding-right: 5px;
+    height: 12px;
+    line-height: 12px;
+    margin-top: 9px;
+    margin-right: 5px;
+  }
+  a:nth-of-type(1) {
+    border-right: 1px solid #333;
+  }
+  a:hover {
+    color: blue;
+  }
+}
+.header-right {
+  display: block;
+
+  a {
+    padding: 0 10px;
+    border-right: 1px solid #666;
+  }
+  a:nth-of-type(8) {
+    border: none;
+  }
+}
+.header-bottom {
+  height: 80px;
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    height: 67px;
+    cursor: pointer;
+  }
+  .header-search {
+    width: 560px;
+    height: 32px;
+    background-color: red;
+    .input {
+      width: 490px;
+      height: 100%;
+      padding-left: 2px;
+      border: 2px solid red;
+      box-sizing: border-box;
+      border-radius: none;
+      outline: none;
+    }
+    .btn {
+      height: 100%;
+      width: 70px;
+      color: #fff;
+      margin: 0 auto;
+      background-color: red;
+      border: none;
+      box-sizing: border-box;
+      border-radius: none;
+      outline: none;
+      cursor: pointer;
+    }
   }
 }
 </style>
