@@ -47,7 +47,7 @@ export default {
     };
   },
   methods: {
-    // 搜索功能
+    /*   // 搜索功能方案一
     search() {
       // searchText解构出来
       const { searchText } = this;
@@ -55,6 +55,29 @@ export default {
       const params = searchText ? `/${searchText}` : "";
       // 生成跳转路径
       const location = `/search` + params;
+      this.$router.push(location);
+    }, */
+    // 搜索功能 方案二
+    // 路由传参
+    search() {
+      // searchText解构出来
+      const { searchText } = this;
+      const location = {
+        // 使用命名路由来传递参数
+        name: "search",
+        // params: {
+        //   searchText: searchText,
+        // },
+        // query: {
+        //   name: "kk",
+        // },
+      };
+      // 如果有参数，可以直接传递，没有的话，就不传
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
       this.$router.push(location);
     },
   },
