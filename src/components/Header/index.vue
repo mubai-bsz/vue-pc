@@ -24,10 +24,10 @@
         <router-link to="/">
           <img src="./images/logo.png" alt="" />
         </router-link>
-        <div class="header-search">
-          <input type="text" class="input" />
-          <button class="btn" @click="push">搜索</button>
-        </div>
+        <form class="header-search" @submit.prevent="search">
+          <input type="text" class="input" v-model="searchText" />
+          <button class="btn">搜索</button>
+        </form>
       </div>
     </div>
   </div>
@@ -40,10 +40,23 @@ import Register from "../../views/Register";
 import Search from "../../views/Search";
 export default {
   name: "Header",
-  methods:{
-    push(){
-      this.$router.push('/search')
-    }
+  data() {
+    return {
+      // 搜索
+      searchText: "",
+    };
+  },
+  methods: {
+    // 搜索功能
+    search() {
+      // searchText解构出来
+      const { searchText } = this;
+      // 三元判断，searchText是否有值
+      const params = searchText ? `/${searchText}` : "";
+      // 生成跳转路径
+      const location = `/search` + params;
+      this.$router.push(location);
+    },
   },
   component: {
     Home,
