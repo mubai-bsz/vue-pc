@@ -11,7 +11,7 @@
           自动登录
         </label>
         <span>忘记密码？</span>
-        <button>登录</button>
+        <button @click="login">登录</button>
         <span>立即注册</span>
       </div>
     </div>
@@ -19,8 +19,20 @@
 </template>
 
 <script>
+import { reqLogin } from "@api/user";
 export default {
   name: "Login",
+  methods: {
+    login() {
+      reqLogin(13700000000, "111111")
+        .then((res) => {
+          console.log("res", res);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
+  },
 };
 </script>
 
