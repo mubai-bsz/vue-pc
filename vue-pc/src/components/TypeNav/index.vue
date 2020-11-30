@@ -1,7 +1,11 @@
 <template>
   <!-- 商品分类导航 -->
   <div class="type-nav">
-    <div class="container">
+    <div
+      class="container"
+      @mouseenter="isSearchShow = true"
+      @mouseleave="isSearchShow = false"
+    >
       <h2 class="all">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -13,7 +17,7 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
+      <div class="sort" v-show="isHomeShow || isSearchShow">
         <div class="all-sort-list2" @click="goSearch">
           <div
             class="item bo"
@@ -137,6 +141,12 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   name: "TypeNav",
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isSearchShow: false,
+    };
+  },
   computed: {
     // 使用vuex模块化，mapState使用对象，而不是用数组,对象中的函数会调用接收的值
     ...mapState({
