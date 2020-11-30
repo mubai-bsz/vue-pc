@@ -8,7 +8,7 @@
             <li class="active">
               <a href="#tab1" data-toggle="tab">热门</a>
             </li>
-            <!-- <li>
+            <li>
               <a href="#tab2" data-toggle="tab">大家电</a>
             </li>
             <li>
@@ -25,35 +25,34 @@
             </li>
             <li>
               <a href="#tab7" data-toggle="tab">高端电器</a>
-            </li> -->
+            </li>
           </ul>
         </div>
       </div>
       <div class="tab-content">
         <div class="tab-pane">
           <div class="floor-1">
-            <div class="blockgary" >
+            <div class="blockgary">
               <ul class="jd-list">
                 <li>节能补贴</li>
-                <!-- <li>4K电视</li>
+                <li>4K电视</li>
                 <li>空气净化器</li>
                 <li>IH电饭煲</li>
                 <li>滚筒洗衣机</li>
-                <li>电热水器</li> -->
+                <li>电热水器</li>
               </ul>
-              <img src="floor.imgUrl" />
+              <img src="./images/floor-1-1.png" />
             </div>
             <div class="floorBanner">
               <div class="swiper-container" id="floor1Swiper">
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="rfloor in floor."
-                    :key="rfloor.id"
-
+                    v-for="floor in floor"
+                    :key="floor.id"
                   >
                     <!-- <img src="./images/floor-1-b01.png" /> -->
-                    <img :src="floor.imgUrl" />
+                    <img src=  />
                   </div>
                   <!-- <div class="swiper-slide">
                       <img src="./images/floor-1-b02.png">
@@ -73,8 +72,7 @@
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <!-- <img src="./images/floor-1-2.png" /> -->
-                <img src="floor.imgUrl" />
+                <img src="./images/floor-1-2.png" />
               </div>
               <div class="floor-conver-pit">
                 <img src="./images/floor-1-3.png" />

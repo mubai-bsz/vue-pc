@@ -10,9 +10,9 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
-    <Floor />
+    <Floor v-for="floor in floors" :key="floor.id" :floor="floor" />
     <!--楼层-->
-    <Floor />
+    <!-- <Floor v-for="floor in floors" :key="floor.id" :floor="floor" /> -->
     <!--商标-->
     <Brand />
   </div>
@@ -20,6 +20,7 @@
 
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Brand from "./Brand/Brand";
 import Floor from "./Floor/Floor";
 import Like from "./Like/Like";
@@ -30,6 +31,19 @@ import TodayRecommend from "./TodayRecommend/TodayRecommend";
 import TypeNav from "@comps/TypeNav";
 export default {
   name: "Home",
+  computed: {
+    ...mapState({
+      floors: (state) => {
+        return state.home.floors;
+      },
+    }),
+  },
+  methods: {
+    ...mapActions(["getFloors"]),
+  },
+  mounted() {
+    this.getFloors();
+  },
   components: {
     Brand,
     Floor,
