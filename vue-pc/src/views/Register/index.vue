@@ -8,22 +8,26 @@
     <form action="" class="register-from">
       <div class="register-phong">
         手&nbsp;&nbsp;机&nbsp;&nbsp;号:
-        <input type="text" value="请输入手机号" />
+        <input type="text" name="user" placeholder="请输入手机号" />
       </div>
       <div class="Verification-code">
         验&nbsp;&nbsp;证&nbsp;&nbsp;码:
-        <input type="text" value="请输入验证码" />
+        <input
+          type="text"
+          name="Verification-code"
+          placeholder="请输入验证码"
+        />
         <img src="" alt="" />
       </div>
       <div class="register-pass">
         登录密码:
-        <input type="password" value="pass" placeholder="请输入你的登录密码" />
+        <input type="password" name="pass" placeholder="请输入你的登录密码" />
       </div>
       <div class="register-repeat-pass">
         确认密码:
         <input
           type="password"
-          value="repeat-pass"
+          name="repeat-pass"
           placeholder="请输入确认密码"
         />
       </div>

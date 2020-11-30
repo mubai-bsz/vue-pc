@@ -10,11 +10,11 @@
           <form class="login-form">
             <div class="login-form-top">
               <i></i>
-              <input type="text" name="user" value="手机号" />
+              <input type="text" name="user" placeholder="手机号" />
             </div>
             <div class="login-form-bottom">
               <i></i>
-              <input type="password" name="pass" value="请输入密码" />
+              <input type="password" name="pass" placeholder="请输入密码" />
             </div>
             <div class="login-form-check">
               <label>
