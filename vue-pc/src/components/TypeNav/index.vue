@@ -14,7 +14,7 @@
         <a href="###">秒杀</a>
       </nav>
       <div class="sort">
-        <div class="all-sort-list2">
+        <div class="all-sort-list2" @click="goSearch">
           <div
             class="item bo"
             v-for="category in categoryList"
@@ -22,7 +22,38 @@
           >
             <h3>
               <!-- 一级分类名称 -->
-              <a href="">{{ category.categoryName }}</a>
+              <!-- <a href="">{{ category.categoryName }}</a> -->
+
+              <!-- 方法一：路由链接导航 
+                  可以实现，跳转的时候，路径发生变化，但是当点击三级路由时，组件加载过多，导致性能不好
+              -->
+              <!-- <router-link
+                :to="`/search?categoryName=${category.categoryName}&category1Id=${category.categoryId} `"
+                >{{ category.categoryName }}</router-link
+              > -->
+              <!-- 方法二：编程式导航，用到那个点那个，就加载那个，性能比较好
+              但是这种方法会出现一个问题，就是点击那样组件，那个组件就要有点击事件，所需要的点击事件太多了，可以使用事件委托的方法，减少事件的绑定
+               -->
+              <!-- <a
+                @click.prevent="
+                  $router.push({
+                    name: 'search',
+                    query: {
+                      categoryName: category.categoryName,
+                      ategory1Id: category.categoryId,
+                    },
+                  })
+                "
+                >{{ category.categoryName }}</a
+              > -->
+
+              <!-- 方法三：事件委托， -->
+              <a
+                :data-categoryName="category.categoryName"
+                :data-categoryId="category.categoryId"
+                :data-categoryType="1"
+                >{{ category.categoryName }}</a
+              >
             </h3>
             <div class="item-list clearfix">
               <div class="subitem">
@@ -33,7 +64,30 @@
                 >
                   <dt>
                     <!-- 二级分类名称 -->
-                    <a href="">{{ child.categoryName }}</a>
+                    <!-- <a href="">{{ child.categoryName }}</a> -->
+                    <!-- <router-link
+                      :to="`/search?categoryName=${child.categoryName}&category2Id=${child.categoryId} `"
+                      >{{ child.categoryName }}</router-link
+                    > -->
+                    <!-- <a
+                      @click.prevent="
+                        $router.push({
+                          name: 'search',
+                          query: {
+                            categoryName: child.categoryName,
+                            categoryId: child.categoryId,
+                          },
+                        })
+                      "
+                      >{{ child.categoryName }}</a
+                    > -->
+
+                    <a
+                      :data-categoryName="child.categoryName"
+                      :data-categoryId="child.categoryId"
+                      :data-categoryType="2"
+                      >{{ child.categoryName }}</a
+                    >
                   </dt>
                   <dd>
                     <!-- 三级分类名称 -->
@@ -41,7 +95,31 @@
                       v-for="grandChild in child.categoryChild"
                       :key="grandChild.categoryId"
                     >
-                      <a href="">{{ grandChild.categoryName }}</a>
+                      <!-- <a href="">{{ grandChild.categoryName }}</a> -->
+                      <!-- <router-link
+                        :to="`/search?categoryName=${grandChild.categoryName}&category3Id=${grandChild.categoryId} `"
+                        >{{ grandChild.categoryName }}</router-link
+                      > -->
+
+                      <!-- <a
+                        @click.prevent="
+                          $router.push({
+                            name: 'search',
+                            query: {
+                              categoryName: grandChild.categoryName,
+                              categoryId: grandChild.categoryId,
+                            },
+                          })
+                        "
+                        >{{ grandChild.categoryName }}</a
+                      > -->
+
+                      <a
+                        :data-categoryName="grandChild.categoryName"
+                        :data-categoryId="grandChild.categoryId"
+                        :data-categoryType="3"
+                        >{{ grandChild.categoryName }}</a
+                      >
                     </em>
                   </dd>
                 </dl>
@@ -68,10 +146,31 @@ export default {
 
   methods: {
     ...mapActions(["getCategoryList"]),
+    // 跳转到search
+    /* 
+      使用事件委托的方法来给Ul li帮定点击事件
+      这种方式需要获取到所要点击事件的名字与id添加到路径产参数上
+      使用自定义属性的方法来获取
+     */
+    goSearch(e) {
+      const { categoryname, categoryid, categorytype } = e.target.dataset;
+
+      // 一个新的问题，点击空白处，也会触发点击事件，这样不好
+      // 解决方法：
+      if (!categoryname) return;
+      console.log(e);
+      this.$router.push({
+        name: "search",
+        query: {
+          categoryName: categoryname,
+          [`category${categorytype}Id`]: categoryid,
+        },
+      });
+    },
   },
   mounted() {
+    // console.log(this);
     this.getCategoryList();
-   
   },
 };
 </script>
