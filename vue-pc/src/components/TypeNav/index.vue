@@ -170,18 +170,23 @@ export default {
       // 一个新的问题，点击空白处，也会触发点击事件，这样不好
       // 解决方法：
       if (!categoryname) return;
-      console.log(e);
-      this.$router.push({
+      const location = {
         name: "search",
         query: {
           categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      // 判断当前是否有params参数
+      const { searchText } = this.$route.params;
+      if (searchText) {
+        location.params = { searchText };
+      }
+      this.$router.push(location);
     },
   },
   mounted() {
-    // console.log(this);
+    // console.log(this.$route);
     this.getCategoryList();
   },
 };

@@ -78,6 +78,15 @@ export default {
           searchText,
         };
       }
+      // 添加query参数
+      const { categoryName } = this.$route.query;
+      // 判断是否有参数，有的话就加上
+      if (categoryName) {
+        location.query = {
+          categoryName,
+        };
+      }
+
       this.$router.push(location);
     },
   },
