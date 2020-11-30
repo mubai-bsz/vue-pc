@@ -17,28 +17,29 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort" v-show="isHomeShow || isSearchShow">
-        <div class="all-sort-list2" @click="goSearch">
-          <div
-            class="item bo"
-            v-for="category in categoryList"
-            :key="category.categoryId"
-          >
-            <h3>
-              <!-- 一级分类名称 -->
-              <!-- <a href="">{{ category.categoryName }}</a> -->
+      <transition name="search">
+        <div class="sort" v-show="isHomeShow || isSearchShow">
+          <div class="all-sort-list2" @click="goSearch">
+            <div
+              class="item bo"
+              v-for="category in categoryList"
+              :key="category.categoryId"
+            >
+              <h3>
+                <!-- 一级分类名称 -->
+                <!-- <a href="">{{ category.categoryName }}</a> -->
 
-              <!-- 方法一：路由链接导航 
+                <!-- 方法一：路由链接导航 
                   可以实现，跳转的时候，路径发生变化，但是当点击三级路由时，组件加载过多，导致性能不好
               -->
-              <!-- <router-link
+                <!-- <router-link
                 :to="`/search?categoryName=${category.categoryName}&category1Id=${category.categoryId} `"
                 >{{ category.categoryName }}</router-link
               > -->
-              <!-- 方法二：编程式导航，用到那个点那个，就加载那个，性能比较好
+                <!-- 方法二：编程式导航，用到那个点那个，就加载那个，性能比较好
               但是这种方法会出现一个问题，就是点击那样组件，那个组件就要有点击事件，所需要的点击事件太多了，可以使用事件委托的方法，减少事件的绑定
                -->
-              <!-- <a
+                <!-- <a
                 @click.prevent="
                   $router.push({
                     name: 'search',
@@ -51,29 +52,29 @@
                 >{{ category.categoryName }}</a
               > -->
 
-              <!-- 方法三：事件委托， -->
-              <a
-                :data-categoryName="category.categoryName"
-                :data-categoryId="category.categoryId"
-                :data-categoryType="1"
-                >{{ category.categoryName }}</a
-              >
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="child in category.categoryChild"
-                  :key="child.categoryId"
+                <!-- 方法三：事件委托， -->
+                <a
+                  :data-categoryName="category.categoryName"
+                  :data-categoryId="category.categoryId"
+                  :data-categoryType="1"
+                  >{{ category.categoryName }}</a
                 >
-                  <dt>
-                    <!-- 二级分类名称 -->
-                    <!-- <a href="">{{ child.categoryName }}</a> -->
-                    <!-- <router-link
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="child in category.categoryChild"
+                    :key="child.categoryId"
+                  >
+                    <dt>
+                      <!-- 二级分类名称 -->
+                      <!-- <a href="">{{ child.categoryName }}</a> -->
+                      <!-- <router-link
                       :to="`/search?categoryName=${child.categoryName}&category2Id=${child.categoryId} `"
                       >{{ child.categoryName }}</router-link
                     > -->
-                    <!-- <a
+                      <!-- <a
                       @click.prevent="
                         $router.push({
                           name: 'search',
@@ -86,26 +87,26 @@
                       >{{ child.categoryName }}</a
                     > -->
 
-                    <a
-                      :data-categoryName="child.categoryName"
-                      :data-categoryId="child.categoryId"
-                      :data-categoryType="2"
-                      >{{ child.categoryName }}</a
-                    >
-                  </dt>
-                  <dd>
-                    <!-- 三级分类名称 -->
-                    <em
-                      v-for="grandChild in child.categoryChild"
-                      :key="grandChild.categoryId"
-                    >
-                      <!-- <a href="">{{ grandChild.categoryName }}</a> -->
-                      <!-- <router-link
+                      <a
+                        :data-categoryName="child.categoryName"
+                        :data-categoryId="child.categoryId"
+                        :data-categoryType="2"
+                        >{{ child.categoryName }}</a
+                      >
+                    </dt>
+                    <dd>
+                      <!-- 三级分类名称 -->
+                      <em
+                        v-for="grandChild in child.categoryChild"
+                        :key="grandChild.categoryId"
+                      >
+                        <!-- <a href="">{{ grandChild.categoryName }}</a> -->
+                        <!-- <router-link
                         :to="`/search?categoryName=${grandChild.categoryName}&category3Id=${grandChild.categoryId} `"
                         >{{ grandChild.categoryName }}</router-link
                       > -->
 
-                      <!-- <a
+                        <!-- <a
                         @click.prevent="
                           $router.push({
                             name: 'search',
@@ -118,20 +119,21 @@
                         >{{ grandChild.categoryName }}</a
                       > -->
 
-                      <a
-                        :data-categoryName="grandChild.categoryName"
-                        :data-categoryId="grandChild.categoryId"
-                        :data-categoryType="3"
-                        >{{ grandChild.categoryName }}</a
-                      >
-                    </em>
-                  </dd>
-                </dl>
+                        <a
+                          :data-categoryName="grandChild.categoryName"
+                          :data-categoryId="grandChild.categoryId"
+                          :data-categoryType="3"
+                          >{{ grandChild.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -226,6 +228,14 @@ export default {
       background: #fafafa;
       z-index: 999;
 
+      // search显示隐藏
+      &.search-enter-active {
+        transition: height 0.5s;
+        overflow: hidden;
+      }
+      &.search-enter {
+        height: 0px;
+      }
       .all-sort-list2 {
         .item {
           h3 {
