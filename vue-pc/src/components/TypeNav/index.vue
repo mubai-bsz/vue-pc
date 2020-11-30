@@ -152,7 +152,7 @@ export default {
   computed: {
     // 使用vuex模块化，mapState使用对象，而不是用数组,对象中的函数会调用接收的值
     ...mapState({
-      categoryList: (state) => state.home.categoryList,
+      categoryList: (state) => state.home.categoryList.splice(0, 15),
     }),
   },
 
