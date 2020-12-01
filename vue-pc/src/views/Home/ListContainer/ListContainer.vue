@@ -3,23 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="banner in banners"
-              :key="banner.id"
-            >
-              <img :src="banner.imgUrl" />
-            </div>
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :carouselList="banners" />
       </div>
       <div class="right">
         <div class="news">
@@ -96,9 +80,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
-import "swiper/swiper-bundle.min.css";
-Swiper.use([Navigation, Pagination, Autoplay]);
+import Carousel from "../../../components/Carousel";
 export default {
   name: "ListContainer",
   computed: {
@@ -109,29 +91,32 @@ export default {
   methods: {
     ...mapActions(["getBanners"]),
   },
+  components: {
+    Carousel,
+  },
   async mounted() {
     await this.getBanners();
-    this.$nextTick(() => {
-      new Swiper(".swiper-container", {
-        loop: true, // 循环模式选项
-        autoplay: {
-          //自动轮播
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
+    // this.$nextTick(() => {
+    //   new Swiper(".swiper-container", {
+    //     loop: true, // 循环模式选项
+    //     autoplay: {
+    //       //自动轮播
+    //       delay: 3000,
+    //       disableOnInteraction: false,
+    //     },
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       clickable: true,
+    //     },
 
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
-    });
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+    //   });
+    // });
   },
 };
 </script>
