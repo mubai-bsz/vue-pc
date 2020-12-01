@@ -12,15 +12,6 @@
             >
               <img :src="banner.imgUrl" />
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -105,6 +96,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+import "swiper/swiper-bundle.min.css";
+Swiper.use([Navigation, Pagination, Autoplay]);
 export default {
   name: "ListContainer",
   computed: {
@@ -115,8 +109,28 @@ export default {
   methods: {
     ...mapActions(["getBanners"]),
   },
-  mounted() {
-    this.getBanners();
+  async mounted() {
+    await this.getBanners();
+    this.$nextTick(() => {
+      new Swiper(".swiper-container", {
+        loop: true, // 循环模式选项
+        autoplay: {
+          //自动轮播
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    });
   },
 };
 </script>

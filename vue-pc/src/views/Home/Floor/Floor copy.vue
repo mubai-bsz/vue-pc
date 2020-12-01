@@ -2,7 +2,7 @@
   <div class="floor">
     <div class="py-container">
       <div class="title clearfix">
-        <h3 class="fl">家用电器</h3>
+        <h3 class="fl">{{ floor.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
             <li class="active">
@@ -46,13 +46,9 @@
             <div class="floorBanner">
               <div class="swiper-container" id="floor1Swiper">
                 <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="floor in floor"
-                    :key="floor.id"
-                  >
+                  <div class="swiper-slide">
                     <!-- <img src="./images/floor-1-b01.png" /> -->
-                    <img src=  />
+                    <img src= />
                   </div>
                   <!-- <div class="swiper-slide">
                       <img src="./images/floor-1-b02.png">
@@ -100,8 +96,18 @@
 <script>
 export default {
   name: "Floor",
+  data() {
+    return {
+      floorData: {},
+    };
+  },
   props: {
     floor: Object,
+  },
+  watcher: {
+    floor(newVal) {
+      this.floorData = newVal;
+    },
   },
 };
 </script>
