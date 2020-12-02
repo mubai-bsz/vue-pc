@@ -48,23 +48,56 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <a
+                    >综合<i
+                      :class="{
+                        iconfont: true,
+                        'icon-jiantou-xia': isAllDown,
+                        'icon-jiantou1': !isAllDown,
+                      }"
+                    ></i
+                  ></a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <!-- 实现按钮的切换 ，如果order是以2开头的话，就返回2的下标，如果不是，则返回-1 -->
+                <li
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  @click="setOrder('2')"
+                >
+                  <a
+                    >价格
+                    <span>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-jiantou2': true,
+                          deactive:
+                            options.order.indexOf('2') > -1 && isPriceDown,
+                        }"
+                      ></i>
+
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-jiantouarrow486': true,
+                          deactive:
+                            options.order.indexOf('2') > -1 && !isPriceDown,
+                        }"
+                      ></i>
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -165,12 +198,14 @@ export default {
         category3Id: "", // 商品三级分类
         categoryName: "", // 商品分类名
         keyword: "", // 搜索关键字
-        order: "", // 排序方式  1：综合排序  2：价格排序 acs：升序  desc：降序
+        order: "1:desc", // 排序方式  1：综合排序  2：价格排序 acs：升序  desc：降序
         pageNo: 1, // 分页的页码（第几页）
         pageSize: 5, //每一页展示的数据
         props: [], // 商品属性
         trademark: "", // 品牌
       },
+      isAllDown: true, //综合排序
+      isPriceDown: false, //价格排序
     };
   },
   watch: {
@@ -248,13 +283,36 @@ export default {
 
     // 品牌属性的添加
     addProp(props) {
-      console.log(props);
+      // console.log(props);
       this.options.props.push(props); //数组，不能使用=来赋值，只能使用数组的方法来添加数据
       this.updataProductList(); //更新数据
     },
     delProp(index) {
       this.options.props.splice(index, 1);
       this.updataProductList();
+    },
+    // 设置排序方式
+    setOrder(order) {
+      // 首先要先判断是升序还是降序
+      // 先把order中的数据解构，orderNum表示综合或者价格，orderType表示升序或降序
+      let [orderNum, orderType] = this.options.order.split(":");
+
+      // 不相等表明是点击的第一次，这时不改变图标
+      // 如果想等，表明是第二次，这时点击修改图标
+      if (orderNum === order) {
+        // 数字是1，为综合排序
+        // 数字是2，为价格排序
+        if (order === "1") {
+          this.isAllDown = !this.isAllDown;
+        } else {
+          this.isPriceDown = !this.isPriceDown;
+        }
+
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        this.isPriceDown = false;
+      }
+      this.options.order = `${order}:${orderType}`;
     },
   },
   mounted() {
@@ -370,13 +428,28 @@ export default {
               line-height: 18px;
 
               a {
-                display: block;
+                display: flex;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
-              }
 
+                i {
+                  padding-left: 5px;
+                }
+              }
+              span {
+                display: flex;
+                flex-direction: column;
+                line-height: 8px;
+                i {
+                  padding-top: 1px;
+                  padding-left: -1px;
+                  &.deactive {
+                    color: rgba(255, 255, 255, 0.65);
+                  }
+                }
+              }
               &.active {
                 a {
                   background: #e1251b;
