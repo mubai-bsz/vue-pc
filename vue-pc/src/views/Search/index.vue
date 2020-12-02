@@ -12,7 +12,17 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">{{ options.keyword }}<i>×</i></li>
+            <li class="with-x" v-show="options.keyword" @click="delKeyword">
+              {{ options.keyword }}<i>×</i>
+            </li>
+            <!-- 商品分类的显示 -->
+            <li
+              class="with-x"
+              v-show="options.categoryName"
+              @click="delCategoryName"
+            >
+              {{ options.categoryName }}<i>×</i>
+            </li>
           </ul>
         </div>
 
@@ -185,6 +195,31 @@ export default {
       this.options = options;
       // 发送请求
       this.getProductList(options);
+    },
+    // 删关键字
+    delKeyword() {
+      // 删除时，keyword删除，但是路径也要变化,并且要清除params参数
+      this.options.keyword = "";
+      // 路径，重新跳转即可
+      this.$router.replace({
+        name: "search",
+        query: this.options.query,
+      });
+      // 触发全局事件上的方法
+      this.$bus.$emit("clearKeyWord");
+    },
+    // 删除分类
+    delCategoryName() {
+      // 把query参数全设置为空
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+      // 删除时，query参数也要删
+      this.$router.replace({
+        name: "search",
+        params: this.$route.params,
+      });
     },
   },
   mounted() {

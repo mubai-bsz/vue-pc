@@ -90,6 +90,11 @@ export default {
       this.$router.push(location);
     },
   },
+  mounted() {
+    this.$bus.$on("clearKeyWord", () => {
+      this.searchText = "";
+    });
+  },
   component: {
     Home,
     Login,
