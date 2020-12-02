@@ -24,7 +24,7 @@ export default {
 		// 请求数据
 		async getProductList({ commit }, data = {}) {
 			const productList = await reqGetProductList(data);
-			console.log(productList);
+			// console.log(productList);
 			commit("GET_PRODUCT_LIST", productList);
 		},
 	},
