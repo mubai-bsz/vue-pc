@@ -136,14 +136,61 @@ import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Search",
+  data() {
+    return {
+      options: {
+        category1Id: "", // 商品一级分类
+        category2Id: "", // 商品二级分类
+        category3Id: "", // 商品三级分类
+        categoryName: "", // 商品分类名
+        keyword: "", // 搜索关键字
+        order: "", // 排序方式  1：综合排序  2：价格排序 acs：升序  desc：降序
+        pageNo: 1, // 分页的页码（第几页）
+        pageSize: 5, //每一页展示的数据
+        props: [], // 商品属性
+        trademark: "", // 品牌
+      },
+    };
+  },
+  watch: {
+    $route() {
+      this.updataProductList();
+    },
+  },
   computed: {
     ...mapGetters(["goodsList"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
+    // 定义更新商品的方法
+    // 这个方法一上来就要触发一次,并且在数据变化的时候也要触发，所以，使用监视属性，监视地址参数变化，所以监视$route 可以实现
+    updataProductList() {
+      // 数据地址变化，有params与query两种参数，但是不知道究竟会触发哪一种变化，这两种参数都要写
+      // 解构赋值，提取params中的searchText参数，：指把searchText改名为keyword
+      const { searchText: keyword } = this.$route.params;
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query;
+
+      // 发送请求所需要的参数
+      const options = {
+        ...this.options,
+        keyword,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      };
+      // 发送请求
+      this.getProductList(options);
+    },
   },
   mounted() {
     this.getProductList();
+    this.updataProductList();
   },
   components: {
     TypeNav,
