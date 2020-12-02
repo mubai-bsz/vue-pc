@@ -87,7 +87,7 @@ export default {
         };
       }
 
-      this.$router.push(location);
+      this.$router.replace(location);
     },
   },
   mounted() {

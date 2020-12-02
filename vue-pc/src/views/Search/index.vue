@@ -13,7 +13,7 @@
           </ul>
           <ul class="fl sui-tag">
             <li class="with-x" v-show="options.keyword" @click="delKeyword">
-              {{ options.keyword }}<i>×</i>
+              关键词：{{ options.keyword }}<i>×</i>
             </li>
             <!-- 商品分类的显示 -->
             <li
@@ -21,13 +21,17 @@
               v-show="options.categoryName"
               @click="delCategoryName"
             >
-              {{ options.categoryName }}<i>×</i>
+              分类名称：{{ options.categoryName }}<i>×</i>
+            </li>
+
+            <li class="with-x" v-show="options.trademark" @click="delTrademark">
+              品牌：{{ options.trademark.split(":")[1] }}<i>×</i>
             </li>
           </ul>
         </div>
 
         <!-- 选择的商品类别 -->
-        <SearchSelector />
+        <SearchSelector :addTrademark="addTrademark" />
 
         <!--商品列表导航-->
         <div class="details clearfix">
@@ -220,6 +224,16 @@ export default {
         name: "search",
         params: this.$route.params,
       });
+    },
+    // 定义添加品牌并更新数据
+    addTrademark(trademark) {
+      this.options.trademark = trademark;
+      this.updataProductList();
+    },
+    // 删除品牌并更新数据
+    delTrademark() {
+      this.options.trademark = "";
+      this.updataProductList();
     },
   },
   mounted() {
