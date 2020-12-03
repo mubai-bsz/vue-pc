@@ -19,6 +19,10 @@ export default {
 		goodsList(state) {
 			return state.productList.goodsList;
 		},
+		// 总数据
+		total(state) {
+			return state.productList.total;
+		},
 	},
 	actions: {
 		// 请求数据

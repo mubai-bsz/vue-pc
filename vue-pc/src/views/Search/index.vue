@@ -149,35 +149,16 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="options.pageNo"
+            layout=" prev, pager, next,sizes,total,  jumper"
+            :page-sizes="[5, 10, 15, 20]"
+            :total="total"
+          >
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -203,6 +184,7 @@ export default {
         pageSize: 5, //每一页展示的数据
         props: [], // 商品属性
         trademark: "", // 品牌
+        total: "",
       },
       isAllDown: true, //综合排序
       isPriceDown: false, //价格排序
@@ -214,13 +196,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["goodsList"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
     // 定义更新商品的方法
     // 这个方法一上来就要触发一次,并且在数据变化的时候也要触发，所以，使用监视属性，监视地址参数变化，所以监视$route 可以实现
-    updataProductList() {
+    updataProductList(pageNo = 1) {
       // 数据地址变化，有params与query两种参数，但是不知道究竟会触发哪一种变化，这两种参数都要写
       // 解构赋值，提取params中的searchText参数，：指把searchText改名为keyword
       const { searchText: keyword } = this.$route.params;
@@ -239,6 +221,7 @@ export default {
         category1Id,
         category2Id,
         category3Id,
+        pageNo,
       };
       // 重新赋值，目的是使全部结果可以动态展示
       this.options = options;
@@ -327,6 +310,18 @@ export default {
 
       this.options.order = `${order}:${orderType}`;
       this.updataProductList();
+    },
+    // 每一页条数发生的变化
+    handleSizeChange(pageSize) {
+      // console.log("pageSize", pageSize);
+      this.options.pageSize = pageSize;
+      this.updataProductList();
+    },
+    // 当页码发生变化，触发
+    handleCurrentChange(pageNo) {
+      // console.log("pageNo", pageNo);
+      // this.options.pageNo = pageNo;
+      this.updataProductList(pageNo);
     },
   },
   mounted() {

@@ -9,6 +9,7 @@ import "./mock/mockServer";
 // 引入公共资源
 import "./style/reset.css";
 import "./style/iconfont.css";
+import './plugins/element.js'
 
 Vue.config.productionTip = false;
 
