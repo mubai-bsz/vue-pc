@@ -307,12 +307,26 @@ export default {
         } else {
           this.isPriceDown = !this.isPriceDown;
         }
-
         orderType = orderType === "desc" ? "asc" : "desc";
       } else {
-        this.isPriceDown = false;
+        // 如果order是2，说明点击的是后面的那个
+        if (order === "2") {
+          this.isPriceDown = false;
+          orderType = "asc";
+        } else {
+          orderType = this.isAllDown ? "desc" : "asc";
+        }
       }
+
+      /* 
+        需求：重复点击某个按钮时，其order值会发生变化，并且下面的商品也会重新排序，
+          1、商品重新排序，说明请求重新发送了，这就需要获得order的值，
+          2、order的值是变化的，当重复点击同一个按钮时，order的值会在升降之间切换，
+          3、这就需要判断，是点击哪个按钮，然后根据点击的情况，切换升降序
+       */
+
       this.options.order = `${order}:${orderType}`;
+      this.updataProductList();
     },
   },
   mounted() {
