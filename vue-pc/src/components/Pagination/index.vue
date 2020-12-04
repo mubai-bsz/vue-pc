@@ -1,19 +1,55 @@
 <template>
   <div class="pagination">
-    <button>上一页</button>
-    <button class="active">1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>下一页</button>
-    <button>总数：xxx</button>
+    <button
+      :disabled="myCurrentPage <= 1"
+      @click="setCurrentPage(myCurrentPage - 1)"
+    >
+      上一页
+    </button>
+    <button :class="{ active: myCurrentPage === 1 }" @click="setCurrentPage(1)">
+      1
+    </button>
+    <button v-show="startEnd.start > 2">...</button>
+    <button
+      v-for="item in mapBtnsCount"
+      :key="item"
+      @click="setCurrentPage(startEnd.start + item - 1)"
+      :class="{ active: myCurrentPage === startEnd.start + item - 1 }"
+    >
+      {{ startEnd.start + item - 1 }}
+    </button>
+
+    <!-- <button
+      v-for="item in mapBtnsCount"
+      :key="item"
+      @click="myCurrentPage(startEnd.start + item - 1)"
+      :class="{ active: myCurrentPage === startEnd.start + item - 1 }"
+    >
+      {{ startEnd.start + item - 1 }}
+    </button> -->
+
+    <button v-show="startEnd.end < totalPage - 1">...</button>
+    <button
+      :class="{ active: myCurrentPage === totalPage }"
+      v-show="totalPage > 1"
+      @click="setCurrentPage(totalPage)"
+    >
+      {{ totalPage }}
+    </button>
+    <button
+      :disabled="myCurrentPage >= totalPage"
+      @click="setCurrentPage(myCurrentPage + 1)"
+    >
+      下一页
+    </button>
+    <button>总数：{{ total }}</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
+
   props: {
     // 当前页
     currentPage: {
@@ -21,7 +57,7 @@ export default {
       default: 1, //默认值 1
     },
 
-    // 显示按钮的数量，这里一般是设置5条
+    // 显示按钮的数量，这里一般是设置7条
     paperCount: {
       type: Number,
       // 需要进行验证的，大于等于5 小于等于21 并且为奇数才可以
@@ -30,29 +66,44 @@ export default {
       validator(val) {
         return val >= 5 && val <= 21 && val % 2 === 1;
       },
+      default: 7,
     },
     // 每页条数
     pageSize: {
       type: Number,
-      deafault: 10,
+      default: 10,
     },
     // 总数
     total: {
       type: Number,
       // required: true,
+      default: 0,
     },
   },
   // props中传递过来的数据不可以直接修改，需要在data中定义一个新的值来保存传递过来的数据
   data() {
     return {
-      MyCurrentpage: this.currentPage,
+      // 方便修改props中的currentPage
+      myCurrentPage: this.currentPage,
     };
   },
+  watch: {
+    // 每次改变页面时更新数据
+    myCurrentPage(currentPage) {
+      this.$emit("current-change", currentPage);
+    },
+    // 当外面的页面发生变化时，里面的页面也要发生变化
+    currentPage(currentPage) {
+      this.currentPage = currentPage;
+    },
+  },
+
   // 计算当前页、每页的值
   computed: {
     // 页面中显示总按钮数:数据总数 / 每一页展示的数据
     // 如果相除有余数的话，需要向上取整，需要添加新的一页
     totalPage() {
+      // console.log(this.total);
       return Math.ceil(this.total / this.pageSize);
     },
 
@@ -60,7 +111,7 @@ export default {
 
     startEnd() {
       // 首先要先收集到需要用到的数据，如每页按钮的数量，当前页
-      const { MyCurrentpage, paperCount, totalPage } = this;
+      const { myCurrentPage, paperCount, totalPage } = this;
       /*  
         要知道显示在中间的按钮的开始和结束的值，首先需要知道中间一共有多少按钮，显示的总数 - 2 就是中间的按钮的值
         然后在依据中间按钮的总数，得到中间开始和结束的值
@@ -102,10 +153,10 @@ export default {
         [1]  --如果start大于总页数，不显示
         中间页默认是5
       */
-      if (MyCurrentpage > totalPage - halfCount) {
+      if (myCurrentPage > totalPage - halfCount) {
         start = totalPage - count;
       } else {
-        start = MyCurrentpage - halfCount;
+        start = myCurrentPage - halfCount;
       }
       if (start <= 1) {
         start = 2;
@@ -120,6 +171,18 @@ export default {
         start,
         end,
       };
+    },
+    // 需要遍历的按钮的数量,即中间按钮的数量
+    mapBtnsCount() {
+      const { start, end } = this.startEnd;
+      const count = end - start + 1;
+      return count >= 1 ? count : 0;
+    },
+  },
+  methods: {
+    setCurrentPage(currentPage) {
+      this.myCurrentPage = currentPage;
+      console.log(this.myCurrentPage);
     },
   },
 };
