@@ -182,7 +182,7 @@ export default {
   methods: {
     setCurrentPage(currentPage) {
       this.myCurrentPage = currentPage;
-      console.log(this.myCurrentPage);
+      // console.log(this.myCurrentPage);
     },
   },
 };

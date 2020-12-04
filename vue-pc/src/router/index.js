@@ -5,6 +5,7 @@ import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
 import Search from "../views/Search";
+import Detail from "@views/Detail";
 
 // 多次点击搜索按钮时会出现错误，根本原因是使用编程式导航触发了router中的promise方法，第一次点击触发返回then方法，第二次会触发catch方法
 // 解决方法：重新书写VueRouter实例上面的router中的push和replace方法
@@ -59,6 +60,11 @@ export default new VueRouter({
 			name: "search",
 			path: "/search/:searchText?",
 			component: Search,
+		},
+		{
+			name: "detail",
+			path: "/item/:id",
+			component: Detail,
 		},
 	],
 });
