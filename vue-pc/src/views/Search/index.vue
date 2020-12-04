@@ -142,10 +142,10 @@
           </div>
           <!-- 分页器 -->
           <Pagination
-            :total="total"
             :currnet-page="options.pageNo"
             :paper-count="7"
             :paper-size="5"
+            :total="total"
           />
           <!-- <el-pagination
             background
@@ -184,7 +184,7 @@ export default {
         pageSize: 5, //每一页展示的数据
         props: [], // 商品属性
         trademark: "", // 品牌
-        total: "",
+        // total: "",
       },
       isAllDown: true, //综合排序
       isPriceDown: false, //价格排序
@@ -224,6 +224,7 @@ export default {
         category3Id,
         pageNo,
         pageSize,
+
       };
       // 重新赋值，目的是使全部结果可以动态展示
       this.options = options;
@@ -332,6 +333,7 @@ export default {
     isOrder(order) {
       return this.options.order.indexOf(order) > -1;
     },
+    
   },
   mounted() {
     this.getProductList();

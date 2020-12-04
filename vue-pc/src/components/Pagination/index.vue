@@ -21,7 +21,7 @@ export default {
       default: 1, //默认值 1
     },
 
-    // 显示按钮的数量
+    // 显示按钮的数量，这里一般是设置5条
     paperCount: {
       type: Number,
       // 需要进行验证的，大于等于5 小于等于21 并且为奇数才可以
@@ -33,20 +33,95 @@ export default {
     },
     // 每页条数
     pageSize: {
-      tyep: Number,
+      type: Number,
       deafault: 10,
     },
     // 总数
     total: {
       type: Number,
-      required: true,
+      // required: true,
     },
   },
-
+  // props中传递过来的数据不可以直接修改，需要在data中定义一个新的值来保存传递过来的数据
+  data() {
+    return {
+      MyCurrentpage: this.currentPage,
+    };
+  },
   // 计算当前页、每页的值
-  computed:{
-    
-  }
+  computed: {
+    // 页面中显示总按钮数:数据总数 / 每一页展示的数据
+    // 如果相除有余数的话，需要向上取整，需要添加新的一页
+    totalPage() {
+      return Math.ceil(this.total / this.pageSize);
+    },
+
+    // 中间按钮的开始和结束的值
+
+    startEnd() {
+      // 首先要先收集到需要用到的数据，如每页按钮的数量，当前页
+      const { MyCurrentpage, paperCount, totalPage } = this;
+      /*  
+        要知道显示在中间的按钮的开始和结束的值，首先需要知道中间一共有多少按钮，显示的总数 - 2 就是中间的按钮的值
+        然后在依据中间按钮的总数，得到中间开始和结束的值
+        情况1：
+        1 ...  3 4 5 6 7 ... 10
+        中间开始的值是3，计算方法：中间按钮想 / 2
+    */
+      // 中间总计的按钮数量,不包含开头和结尾
+      const count = paperCount - 2;
+      // 中间按钮数量的一半
+      const halfCount = Math.floor(count / 2);
+
+      // 定义开始 结尾
+      let start, end;
+
+      /* 
+      start
+          1. start = myCurrentPage - halfCount
+            1...3 4 [5] 6 7...10
+               3   =       5       -    2
+            问题：
+              1 [2] 3 4 5 6 ...10  
+               0    =      2        -    2
+            解决：修正start的值，不能小于1
+
+            问题：
+              1 ... 5 6 7 8 [9] 10  
+              7  =   9  - 2
+           
+        end 
+          2. end = start + count - 1
+            1...3 4 [5] 6 7...10
+               7   =  3  +  5 - 1
+        当前页所在的几种情况：
+        1 [2] 3 4 5 6 ... 10
+        1 ... 3 4 [5] 6 7 ... 10
+        1 ... 5 6 7 8 [9] 10 当前页大于总按钮数 - 按钮的一半
+        1 [2] 3 
+        [1]  --如果start大于总页数，不显示
+        中间页默认是5
+      */
+      if (MyCurrentpage > totalPage - halfCount) {
+        start = totalPage - count;
+      } else {
+        start = MyCurrentpage - halfCount;
+      }
+      if (start <= 1) {
+        start = 2;
+      }
+
+      end = start + count - 1;
+      if (end >= totalPage) {
+        end = totalPage - 1;
+      }
+      // 返回计算结果
+      return {
+        start,
+        end,
+      };
+    },
+  },
 };
 </script>
 
