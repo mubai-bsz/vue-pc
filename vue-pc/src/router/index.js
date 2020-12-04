@@ -67,4 +67,8 @@ export default new VueRouter({
 			component: Detail,
 		},
 	],
+	// 每次切换路由页面滚动条的位置
+	scrollBehavior() {
+		return { x: 0, y: 0 };
+	},
 });

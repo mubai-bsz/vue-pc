@@ -1,7 +1,7 @@
 import request from "@utils/request";
-export const reqGetProductDetail = (data) => {
+export const reqGetProductDetail = (id) => {
 	return request({
 		method: "GET",
-		url: "/item",
+		url: `/item/${id}`,
 	});
 };
