@@ -154,7 +154,8 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="options.pageNo"
-            layout=" prev, pager, next,sizes,total,  jumper"
+            :page-size="options.pageSize"
+            layout=" prev, pager, next,sizes,total"
             :page-sizes="[5, 10, 15, 20]"
             :total="total"
           >
@@ -202,7 +203,8 @@ export default {
     ...mapActions(["getProductList"]),
     // 定义更新商品的方法
     // 这个方法一上来就要触发一次,并且在数据变化的时候也要触发，所以，使用监视属性，监视地址参数变化，所以监视$route 可以实现
-    updataProductList(pageNo = 1) {
+    updataProductList({ pageNo = 1, pageSize } = {}) {
+      // console.log(pageNo, pageSize);
       // 数据地址变化，有params与query两种参数，但是不知道究竟会触发哪一种变化，这两种参数都要写
       // 解构赋值，提取params中的searchText参数，：指把searchText改名为keyword
       const { searchText: keyword } = this.$route.params;
@@ -222,6 +224,7 @@ export default {
         category2Id,
         category3Id,
         pageNo,
+        pageSize,
       };
       // 重新赋值，目的是使全部结果可以动态展示
       this.options = options;
@@ -314,14 +317,15 @@ export default {
     // 每一页条数发生的变化
     handleSizeChange(pageSize) {
       // console.log("pageSize", pageSize);
-      this.options.pageSize = pageSize;
-      this.updataProductList();
+      // this.options.pageSize = pageSize;
+      this.pageSize = pageSize;
+      this.updataProductList({ pageSize });
     },
     // 当页码发生变化，触发
     handleCurrentChange(pageNo) {
       // console.log("pageNo", pageNo);
       // this.options.pageNo = pageNo;
-      this.updataProductList(pageNo);
+      this.updataProductList({ pageNo, pageSize: this.pageSize });
     },
   },
   mounted() {
