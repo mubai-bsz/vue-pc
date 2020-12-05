@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -15,11 +15,41 @@
 </template>
 
 <script>
-// import Swiper from 'swiper'
+import Swiper, { Navigation } from "swiper";
+
+// Swiper6默认只有核心轮播图功能，其他功能没有
+// 要使用其他功能，需要先加载
+Swiper.use([Navigation]);
 export default {
   name: "ImageList",
   props: {
     skuImageList: Array,
+  },
+  /* swiper组件写在哪里？
+    两个条件：
+        1、数据要加载成功才能使用
+        2、DOM结构要加载成功才能显示
+
+    数据的加载是异步加载的 ，所以swiper组件使用时应该在数据及dom结构完成渲染之后才展示，
+    并且在加载完成的时候，可以点击选择，这就需要一个方法，
+
+    watch来监视数据的时候，监视的是一个函数
+  */
+  watch: {
+    skuImageList() {
+      this.$nextTick(() => {
+        new Swiper(this.$refs.swiper, {
+          slidesPerView: 5,
+          spaceBetween: 30,
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          slidesPerGroup: 5,
+        });
+      });
+    },
   },
 };
 </script>

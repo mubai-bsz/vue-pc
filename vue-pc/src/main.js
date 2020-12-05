@@ -9,8 +9,8 @@ import "./mock/mockServer";
 // 引入公共资源
 import "./style/reset.css";
 import "./style/iconfont.css";
-import './plugins/element.js'
-
+import "./plugins/element.js";
+import "swiper/swiper-bundle.min.css";
 Vue.config.productionTip = false;
 
 new Vue({
