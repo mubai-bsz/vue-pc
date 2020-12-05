@@ -12,6 +12,9 @@
 <script>
   export default {
     name: "Zoom",
+    methods:{
+      
+    }
   }
 </script>
 

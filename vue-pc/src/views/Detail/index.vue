@@ -18,7 +18,7 @@
           <!--放大镜效果-->
           <Zoom />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :skuImageList="skuInfo.skuImageList" />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -86,7 +86,6 @@
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
               </dl>
-         
             </div>
             <div class="cartWrap">
               <div class="controls">

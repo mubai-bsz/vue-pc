@@ -21,7 +21,8 @@ export default {
 	},
 	actions: {
 		async getProductDetail({ commit }, id) {
-			const productDetail = await reqGetProductDetail(id);
+      const productDetail = await reqGetProductDetail(id);
+      // console.log(productDetail)
 			commit("GET_PRODUCT_DETAIL", productDetail);
 		},
 	},
