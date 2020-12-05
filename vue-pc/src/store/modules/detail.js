@@ -4,7 +4,9 @@ export default {
 		// 把productDetail，定义成一个对象，里面是其数据内容
 		productDetail: {
 			categoryView: {},
-			skuInfo: {},
+			skuInfo: {
+				skuImageList: [],
+			},
 			spuSaleAttrList: [],
 		},
 	},
@@ -21,8 +23,8 @@ export default {
 	},
 	actions: {
 		async getProductDetail({ commit }, id) {
-      const productDetail = await reqGetProductDetail(id);
-      // console.log(productDetail)
+			const productDetail = await reqGetProductDetail(id);
+			// console.log(productDetail)
 			commit("GET_PRODUCT_DETAIL", productDetail);
 		},
 	},

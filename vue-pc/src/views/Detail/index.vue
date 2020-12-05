@@ -15,10 +15,22 @@
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
-          <!--放大镜效果-->
-          <Zoom />
-          <!-- 小图列表 -->
-          <ImageList :skuImageList="skuInfo.skuImageList" />
+          <!--放大镜效果 中图与大图接收下标-->
+          <Zoom
+            :imgUrl="
+              skuInfo.skuImageList[currentImgIndex] &&
+              skuInfo.skuImageList[currentImgIndex].imgUrl
+            "
+            :bigImgUrl="
+              skuInfo.skuImageList[currentImgIndex] &&
+              skuInfo.skuImageList[currentImgIndex].imgUrl
+            "
+          />
+          <!-- 小图列表,点击小图时，传递下标，同时，下标也要传到大图与中图上 -->
+          <ImageList
+            :skuImageList="skuInfo.skuImageList"
+            :updateCurrentImgIndex="updateCurrentImgIndex"
+          />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -341,15 +353,25 @@ import TypeNav from "@comps/TypeNav";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      // 给当前选中的图片默认设置为第一张，下标设置为0
+      currentImgIndex: 0,
+    };
+  },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
     ...mapActions(["getProductDetail"]),
+    updateCurrentImgIndex(index) {
+      this.currentImgIndex = index;
+    },
   },
   mounted() {
     this.getProductDetail(this.$route.params.id);
   },
+
   components: {
     ImageList,
     Zoom,

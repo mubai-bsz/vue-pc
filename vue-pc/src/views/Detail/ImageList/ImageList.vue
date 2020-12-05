@@ -3,10 +3,10 @@
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
-        v-for="skuImage in skuImageList"
+        v-for="(skuImage, index) in skuImageList"
         :key="skuImage.id"
       >
-        <img :src="skuImage.imgUrl" />
+        <img :src="skuImage.imgUrl" @click="updateCurrentImgIndex(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -24,11 +24,12 @@ export default {
   name: "ImageList",
   props: {
     skuImageList: Array,
+    updateCurrentImgIndex: Function,
   },
   /* swiper组件写在哪里？
     两个条件：
-        1、数据要加载成功才能使用
-        2、DOM结构要加载成功才能显示
+        1、数据要加载成功才能使用，watch监视
+        2、DOM结构要加载成功才能显示，nextTick方法
 
     数据的加载是异步加载的 ，所以swiper组件使用时应该在数据及dom结构完成渲染之后才展示，
     并且在加载完成的时候，可以点击选择，这就需要一个方法，
