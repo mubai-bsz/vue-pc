@@ -51,7 +51,9 @@
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="delCarts(cart.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -60,8 +62,10 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
-        <span>全选</span>
+        <label>
+          <input type="checkbox" />
+          <span>全选</span>
+        </label>
       </div>
       <div class="option">
         <a href="#none">删除选中的商品</a>
@@ -89,6 +93,7 @@
 import { mapState, mapActions } from "vuex";
 export default {
   name: "ShopCart",
+
   computed: {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
@@ -97,7 +102,7 @@ export default {
     total() {
       return this.cartList
         .filter((cart) => cart.isChecked === 1)
-        .reduce((p, c) => p + c.skuNum, 0); 
+        .reduce((p, c) => p + c.skuNum, 0);
     },
     // 商品总价
     totalPrice() {
@@ -107,13 +112,25 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCartList", "updateCartCount"]),
+    ...mapActions(["getCartList", "updateCartCount", "delCart"]),
     // 更新商品数量
     async updateCount(skuId, skuNum) {
       // 更新商品
       await this.updateCartCount({ skuId, skuNum });
       // 刷新页面,自动更新
       // this.getCartList();
+    },
+    // 全选
+    // const { isChecked} = this.cart,
+
+    // 删除选中的商品
+    delCarts(skuId) {
+      /* 
+        同样要请求数据
+      */
+      if (window.confirm("确定要删除吗?")) {
+        this.delCart(skuId);
+      }
     },
   },
   mounted() {

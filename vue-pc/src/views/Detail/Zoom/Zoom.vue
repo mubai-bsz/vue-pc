@@ -1,11 +1,11 @@
 <template>
   <div class="spec-preview">
     <img :src="imgUrl" />
-    <div class="event"></div>
+    <div class="event" @mousemove="handleMove"></div>
     <div class="big">
-      <img :src="bigImgUrl" />
+      <img :src="bigImgUrl" ref="bigImg" />
     </div>
-    <div class="mask" ></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -23,15 +23,28 @@ export default {
     //   // 鼠标在移动时，蒙版一起移动，同时，右边的大图区域也会移动，但是移动的方向是相反的
     //   // 鼠标位置到放大镜边缘的信息
 
-    //   var mouseTOMask = {
-    //     x: e.offsetX - imgUrl.getBoundingClientRect().left,
-    //     y: e.offsetY - imgUrl.getBoundingClientRect().left,
-    //   };
-    //   // 蒙版一半位置信息信息
-    //   var halfMask = {};
-
-    //   console.log(mouseTOMask);
-    // },
+    handleMove(e) {
+      // console.log(e);
+      // x,y是蒙版的左、上边界
+      let x = e.offsetX - 100;
+      let y = e.offsetY - 100; //console.log(x); //console.log(y);
+      if (x <= 0) {
+        x = 0;
+      }
+      if (x >= 200) {
+        x = 200;
+      }
+      if (y >= 200) {
+        y = 200;
+      }
+      if (y <= 0) {
+        y = 0;
+      }
+      this.$refs.mask.style.left = x + "px";
+      this.$refs.mask.style.top = y + "px";
+      this.$refs.bigImg.style.left = -2 * x + "px";
+      this.$refs.bigImg.style.top = -2 * y + "px";
+    },
   },
 };
 </script>

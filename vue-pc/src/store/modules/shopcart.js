@@ -2,7 +2,7 @@ import {
 	reqGetCartList,
 	reqUpdateCartCheck,
 	reqUpdateCartCount,
-	// reqDelCart,
+	reqDelCart,
 } from "@api/shopcart";
 
 export default {
@@ -31,6 +31,11 @@ export default {
 			// 1、手动更新veux的数据，页面重新渲染，发的请求少一点
 			// 2、重新请求购物车的数据，发的请求多一些
 		},
+
+		async delCart({ commit }, skuId) {
+			await reqDelCart(skuId);
+			commit("DEL_CART", skuId);
+		},
 	},
 	mutations: {
 		GET_CART_LIST(state, cartList) {
@@ -44,6 +49,9 @@ export default {
 				}
 				return cart;
 			});
+		},
+		DEL_CART(state, skuId) {
+      state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId)
 		},
 	},
 };
