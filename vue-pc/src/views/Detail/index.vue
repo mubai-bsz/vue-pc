@@ -110,7 +110,8 @@
                 ></el-input-number>
               </div>
               <div class="add" @click="addCart">
-                <router-link to="/addcartsuccess">加入购物车</router-link>
+                <!-- <router-link to="/addcartsuccess">加入购物车</router-link> -->
+                <a href="javascript:">加入购物车</a>
               </div>
             </div>
           </div>
@@ -378,8 +379,8 @@ export default {
       // 加入购物车可能会失败，使用try catch监视
       try {
         // 发请求，异步请求
-        await this.pdateCartCount({
-          skuid: this.skuInfo.id,
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });
         // 加入购物车成功，就跳转到加入购物车成功的页面

@@ -14,19 +14,18 @@ export default {
 	actions: {
 		async getCartList({ commit }) {
 			const cartList = await reqGetCartList();
-      commit("GET_CART_LIST", cartList);
-    
+			commit("GET_CART_LIST", cartList);
 		},
 		// 发送请求更新服务器数据，发送请求即可，没有返回结果
 		async updateCartCount({ commit }, { skuId, skuNum }) {
 			await reqUpdateCartCount(skuId, skuNum);
-			console.log(commit);
+			commit("UPDATE_CART_COUNT", { skuId, skuNum });
 		},
 
 		async updateCartCheck({ commit }, { skuId, isChecked }) {
 			// 发送请求，用来更新服务器数据
-			const updateCartCheck = await reqUpdateCartCheck(skuId, isChecked);
-			commit("UPDATE_CART_CHECK", updateCartCheck);
+			await reqUpdateCartCheck(skuId, isChecked);
+			console.log(commit);
 
 			// 更新数据的方法：
 			// 1、手动更新veux的数据，页面重新渲染，发的请求少一点
