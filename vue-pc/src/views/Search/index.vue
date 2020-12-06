@@ -104,7 +104,7 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <router-link :to="`/item/${goodList.id}`"
+                    <router-link :to="`/detail/${goodList.id}`"
                       ><img :src="goodList.defaultImg"
                     /></router-link>
                   </div>
@@ -115,7 +115,7 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <router-link :to="`/item/${goodList.id}`">{{
+                    <router-link :to="`/detail/${goodList.id}`">{{
                       goodList.title
                     }}</router-link>
                   </div>

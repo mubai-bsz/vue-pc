@@ -101,11 +101,15 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <el-input-number
+                  class="input-number"
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="100"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -357,15 +361,32 @@ export default {
     return {
       // 给当前选中的图片默认设置为第一张，下标设置为0
       currentImgIndex: 0,
+      skuNum: 1,
     };
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
+    // 更新选中图片的下标
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
+    },
+    // 加入购物车
+    async addCart() {
+      // 加入购物车可能会失败，使用try catch监视
+      try {
+        // 发请求，异步请求
+        await this.pdateCartCount({
+          skuid: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        // 加入购物车成功，就跳转到加入购物车成功的页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   mounted() {
@@ -549,6 +570,10 @@ export default {
               float: left;
               margin-right: 15px;
 
+              .input-number {
+                width: 100px;
+              }
+
               .itxt {
                 width: 38px;
                 height: 37px;
@@ -585,6 +610,7 @@ export default {
 
             .add {
               float: left;
+              margin-left: 50px;
 
               a {
                 background-color: #e1251b;

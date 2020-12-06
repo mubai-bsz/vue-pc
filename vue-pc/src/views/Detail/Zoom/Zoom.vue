@@ -5,7 +5,7 @@
     <div class="big">
       <img :src="bigImgUrl" />
     </div>
-    <div class="mask"></div>
+    <div class="mask" ></div>
   </div>
 </template>
 
@@ -15,6 +15,23 @@ export default {
   props: {
     imgUrl: String,
     bigImgUrl: String,
+  },
+  methods: {
+    // handMove(e) {
+    //   // 首先是获取到鼠标的位置信息
+    //   // 得到蒙版的移动位置
+    //   // 鼠标在移动时，蒙版一起移动，同时，右边的大图区域也会移动，但是移动的方向是相反的
+    //   // 鼠标位置到放大镜边缘的信息
+
+    //   var mouseTOMask = {
+    //     x: e.offsetX - imgUrl.getBoundingClientRect().left,
+    //     y: e.offsetY - imgUrl.getBoundingClientRect().left,
+    //   };
+    //   // 蒙版一半位置信息信息
+    //   var halfMask = {};
+
+    //   console.log(mouseTOMask);
+    // },
   },
 };
 </script>
