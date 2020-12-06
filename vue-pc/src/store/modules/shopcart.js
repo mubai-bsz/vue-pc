@@ -36,5 +36,14 @@ export default {
 		GET_CART_LIST(state, cartList) {
 			state.cartList = cartList;
 		},
+		// 自动更新
+		UPDATE_CART_COUNT(state, { skuId, skuNum }) {
+			state.cartList = state.cartList.map((cart) => {
+				if (cart.skuId === skuId) {
+					cart.skuNum += skuNum;
+				}
+				return cart;
+			});
+		},
 	},
 };

@@ -14,7 +14,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="isChecked" />
+            <input type="checkbox" name="chk_list" :checked="cart.isChecked" />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -27,7 +27,12 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              @click="updateCount(cart.skuId, -1)"
+              class="mins"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
@@ -35,7 +40,12 @@
               minnum="1"
               class="itxt"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              @click="updateCount(cart.skuId, 1)"
+              class="plus"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -59,10 +69,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ total }}</span
+          >件商品
+        </div>
         <div class="sumprice">
-          <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <em>总价（不含运费） ：{{ totalPrice }}</em>
+          <i class="summoney"></i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -80,9 +93,28 @@ export default {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
+    // 商品总数
+    total() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum, 0); 
+    },
+    // 商品总价
+    totalPrice() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum * c.skuPrice, 0);
+    },
   },
   methods: {
-    ...mapActions(["getCartList"]),
+    ...mapActions(["getCartList", "updateCartCount"]),
+    // 更新商品数量
+    async updateCount(skuId, skuNum) {
+      // 更新商品
+      await this.updateCartCount({ skuId, skuNum });
+      // 刷新页面,自动更新
+      // this.getCartList();
+    },
   },
   mounted() {
     this.getCartList();
@@ -113,7 +145,7 @@ export default {
       }
 
       .cart-th1 {
-        width: 25%;
+        width: 20%;
 
         input {
           vertical-align: middle;
@@ -125,7 +157,7 @@ export default {
       }
 
       .cart-th2 {
-        width: 25%;
+        width: 20%;
       }
 
       .cart-th3,
@@ -150,11 +182,11 @@ export default {
         }
 
         .cart-list-con1 {
-          width: 4.1667%;
+          width: 5%;
         }
 
         .cart-list-con2 {
-          width: 25%;
+          width: 35%;
 
           img {
             width: 82px;
@@ -171,7 +203,7 @@ export default {
         }
 
         .cart-list-con3 {
-          width: 20.8333%;
+          width: 15%;
 
           .item-txt {
             text-align: center;
@@ -179,11 +211,11 @@ export default {
         }
 
         .cart-list-con4 {
-          width: 12.5%;
+          width: 15%;
         }
 
         .cart-list-con5 {
-          width: 12.5%;
+          width: 15%;
 
           .mins {
             border: 1px solid #ddd;
@@ -216,7 +248,7 @@ export default {
         }
 
         .cart-list-con6 {
-          width: 12.5%;
+          width: 15%;
 
           .sum {
             font-size: 16px;
@@ -224,7 +256,7 @@ export default {
         }
 
         .cart-list-con7 {
-          width: 12.5%;
+          width: 15%;
 
           a {
             color: #666;
