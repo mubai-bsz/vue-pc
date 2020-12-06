@@ -110,7 +110,7 @@
                 ></el-input-number>
               </div>
               <div class="add" @click="addCart">
-                <a href="javascript:">加入购物车</a>
+                <router-link to="/addcartsuccess">加入购物车</router-link>
               </div>
             </div>
           </div>

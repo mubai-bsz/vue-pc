@@ -78,7 +78,7 @@ export default {
   name: "ShopCart",
   computed: {
     ...mapState({
-      getCartList: (state) => state.shopcart.cartList,
+      cartList: (state) => state.shopcart.cartList,
     }),
   },
   methods: {

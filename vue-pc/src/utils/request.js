@@ -2,17 +2,18 @@
   封装axios拦截器
 */
 import axios from "axios";
-
+import getUserTempId from "@utils/getUserTempId";
 // 引入进度条插件与进度条样式
 import NProgress from "nprogress";
 import "nprogress/nprogress";
 
+// 使用UUID生成id
+const userTempId = getUserTempId();
+
 const instence = axios.create({
 	// 公共的基础路径
 	baseURL: "/api",
-	headers: {
-		// 书写公共参数
-	},
+	// /
 });
 
 // 设置请求拦截器
@@ -23,11 +24,13 @@ instence.interceptors.request.use(
 
 		// 使用进度条插件,在请求开始前发送
 		NProgress.start();
+		// 在请求头上添加一个id
+		config.headers.userTempId = userTempId;
 		return config;
-	},
+	}
 	// 失败的回调
 	// 一般不会被触发，第一次promise.resolve（）会返回默认成功的promise对象
-	() => {}
+	// () => {}
 );
 
 // 设置响应拦截器

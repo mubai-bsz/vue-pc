@@ -14,7 +14,8 @@ export default {
 	actions: {
 		async getCartList({ commit }) {
 			const cartList = await reqGetCartList();
-			commit("GET_CART_LIST", cartList);
+      commit("GET_CART_LIST", cartList);
+    
 		},
 		// 发送请求更新服务器数据，发送请求即可，没有返回结果
 		async updateCartCount({ commit }, { skuId, skuNum }) {
