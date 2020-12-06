@@ -1,30 +1,33 @@
 import request from "@utils/request";
 
-// 获取购物车列表
+// 获取所有购物车数据
 export const reqGetCartList = () => {
 	return request({
 		method: "GET",
-		url: "/cart/cartList",
+		url: `/cart/cartList`,
 	});
 };
-// 添加到购物车
+
+// 添加、减少购物车商品数量
 export const reqUpdateCartCount = (skuId, skuNum) => {
 	return request({
 		method: "POST",
 		url: `/cart/addToCart/${skuId}/${skuNum}`,
 	});
 };
-// 切换商品 选中状态
-export const reqUpdateCartCheck = (skuID, isChecked) => {
+
+// 切换商品选中状态
+export const reqUpdateCartCheck = (skuId, isChecked) => {
 	return request({
 		method: "GET",
-		url: `/cart/checkCart/${skuID}/${isChecked}`,
+		url: `/cart/addToCart/${skuId}/${isChecked}`,
 	});
 };
-// 删除购物车商品
-export const reqDelCart = (skuID) => {
+
+// 删除商品
+export const reqDelCart = (skuId) => {
 	return request({
 		method: "DELETE",
-		url: `/cart/deleteCart/${skuID}`,
+		url: `/cart/deleteCart/${skuId}`,
 	});
 };
