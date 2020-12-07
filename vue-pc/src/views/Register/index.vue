@@ -36,12 +36,15 @@
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
-        <label>登录密码:</label>
-        <input
-          type="password"
-          placeholder="请输入你的登录密码"
-          v-model="user.password"
-        />
+        <ValidationProvider rules="pass" v-slot="{ errors }">
+          <label>登录密码:</label>
+          <input
+            type="password"
+            placeholder="请输入你的登录密码"
+            v-model="user.password"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="content">
@@ -59,7 +62,7 @@
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
       <div class="btn">
-        <button @click="register">完成注册</button>
+        <button @click="submit">完成注册</button>
       </div>
     </div>
 
@@ -84,6 +87,7 @@
 <script>
 import { ValidationProvider, extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
+
 // 内置规则
 extend("required", {
   ...required,
@@ -114,6 +118,14 @@ extend("codeLength", {
   },
   message: "长度必须为4位",
 });
+
+// 自定义规则，密码校验
+extend("pass", {
+  validate(value) {
+    return value.length >= 6 && value.length <= 10;
+  },
+  message: "密码长度在6-10位之间",
+});
 export default {
   name: "Register",
   data() {
@@ -128,19 +140,26 @@ export default {
     };
   },
   methods: {
-    register() {
-      // 1、收集表单数据，为了进行校验
-      const { password, rePassword, isAgree } = this.user;
-      // 2、进行正则校验
-      if (!isAgree) {
-        this.$message("请同意用户协议");
-        return;
+    async submit() {
+      try {
+        // 1、收集表单数据，为了进行校验
+        const { phone, password, rePassword, isAgree, code } = this.user;
+        // 2、进行正则校验
+        if (!isAgree) {
+          this.$message.error("请同意用户协议");
+          return;
+        }
+        if (password !== rePassword) {
+          this.$message.error("两次输入密码不一致");
+          return;
+        }
+
+        //3、发送请求注册
+        await this.$store.dispatch("register", { phone, password, code });
+        this.$router.push("/login");
+      } catch (e) {
+        console.log(e);
       }
-      if (password !== rePassword) {
-        this.$message("两次输入密码不一致");
-        return;
-      }
-      //3、发送请求注册
     },
     // 刷新验证码
     refresh(e) {
