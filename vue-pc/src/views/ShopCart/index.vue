@@ -27,12 +27,14 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a
+            <button
               href="javascript:void(0)"
               @click="updateCount(cart.skuId, -1)"
               class="mins"
-              >-</a
+              :disabled="cart.skuNum <= 0"
             >
+              -
+            </button>
             <input
               autocomplete="off"
               type="text"
@@ -40,12 +42,14 @@
               minnum="1"
               class="itxt"
             />
-            <a
+            <button
               href="javascript:void(0)"
               @click="updateCount(cart.skuId, 1)"
               class="plus"
-              >+</a
+              :disabled="cart.skuNum === 100"
             >
+              +
+            </button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -63,7 +67,7 @@
     <div class="cart-tool">
       <div class="select-all">
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" v-model="checkAll" />
           <span>全选</span>
         </label>
       </div>
@@ -121,7 +125,7 @@ export default {
       // this.getCartList();
     },
     // 全选
-    // const { isChecked} = this.cart,
+    checkAll() {},
 
     // 删除选中的商品
     delCarts(skuId) {

@@ -1,202 +1,246 @@
 <template>
-  <div class="login">
-    <div class="login-bg">
-      <div class="login-con">
-        <div class="login-con-list">
-          <ul>
-            <li class="login-left"><a href="">扫描登录</a></li>
-            <li class="login-right"><a href="">账户登录</a></li>
+  <div class="login-container">
+    <!-- 登录 -->
+    <div class="login-wrap">
+      <div class="login">
+        <div class="loginform">
+          <ul class="tab clearFix">
+            <li>
+              <a href="##" style="border-right: 0;">扫描登录</a>
+            </li>
+            <li>
+              <a href="##" class="current">账户登录</a>
+            </li>
           </ul>
-          <form class="login-form">
-            <div class="login-form-top">
-              <i></i>
-              <input type="text" name="user" placeholder="手机号" />
+
+          <div class="content">
+            <form action="##">
+              <div class="input-text clearFix">
+                <span></span>
+                <input type="text" placeholder="邮箱/用户名/手机号">
+              </div>
+              <div class="input-text clearFix">
+                <span class="pwd"></span>
+                <input type="text" placeholder="请输入密码">
+              </div>
+              <div class="setting clearFix">
+                <label class="checkbox inline">
+                  <input name="m1" type="checkbox" value="2" checked="">
+                  自动登录
+                </label>
+                <span class="forget">忘记密码？</span>
+              </div>
+              <button class="btn">登&nbsp;&nbsp;录</button>
+            </form>
+
+            <div class="call clearFix">
+              <ul>
+                <li><img src="./images/qq.png" alt=""></li>
+                <li><img src="./images/sina.png" alt=""></li>
+                <li><img src="./images/ali.png" alt=""></li>
+                <li><img src="./images/weixin.png" alt=""></li>
+              </ul>
+              <router-link class="register" to="/register">立即注册</router-link>
             </div>
-            <div class="login-form-bottom">
-              <i></i>
-              <input type="password" name="pass" placeholder="请输入密码" />
-            </div>
-            <div class="login-form-check">
-              <label>
-                <input type="checkbox" checked />
-                自动登录
-              </label>
-              <span>忘记密码？</span>
-            </div>
-            <button class="login-login-button" @click="login">登录</button>
-          </form>
-          <div class="login-login-register">
-            <p>立即注册</p>
           </div>
         </div>
+      </div>
+    </div>
+    <!-- 底部 -->
+    <div class="copyright">
+      <ul>
+        <li>关于我们</li>
+        <li>联系我们</li>
+        <li>联系客服</li>
+        <li>商家入驻</li>
+        <li>营销中心</li>
+        <li>手机尚品汇</li>
+        <li>销售联盟</li>
+        <li>尚品汇社区</li>
+      </ul>
+      <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
+      <div class="beian">京ICP备19006430号
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { reqLogin } from "@/api/user";
-export default {
-  name: "Login",
-  methods: {
-    login() {
-      reqLogin(13700000000, "111111")
-        .then((res) => {
-          console.log("res", res);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-    },
-  },
-};
+  export default {
+    name: 'Login',
+  }
 </script>
 
 <style lang="less" scoped>
-* {
-  margin: 0;
-  padding: 0;
-}
-.login {
-  height: 487px;
-  background-color: #e93854;
-  .login-bg {
-    width: 1200px;
-    height: 100%;
-    margin: 0 auto;
-    background: url("./images/loginbg.png") no-repeat;
-    position: relative;
-  }
-}
-.login-con {
-  width: 420px;
-  height: 406px;
-  background-color: #fff;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  margin-top: -203px;
-  display: flex;
-  align-items: center;
-}
-.login-con-list {
-  width: 380px;
-  height: 366px;
-  border: 1px solid #999;
-  margin: 0 auto;
-}
-.login-con-list ul {
-  height: 50px;
-  display: flex;
-  color: #333;
-  font-weight: 800;
-  .login-left {
-    width: 190px;
-    height: 50px;
-    border-right: 1px solid #999;
-    border-bottom: 1px solid #999;
-    font-size: 20px;
-    line-height: 50px;
-    text-align: center;
-    a {
-      color: #333;
-      font-weight: 800;
-      text-decoration: none;
-    }
-    a:hover {
-      color: blue;
-    }
-  }
-  .login-right {
-    width: 190px;
-    height: 50px;
+  .login-container {
+    .login-wrap {
+      height: 487px;
+      background-color: #e93854;
 
-    font-size: 20px;
-    line-height: 50px;
-    text-align: center;
-    a {
-      color: rgb(236, 44, 44);
-      font-weight: 800;
-      text-decoration: none;
-    }
-    a:hover {
-      color: blue;
-    }
-  }
-}
-.login-form {
-  width: 342px;
-  height: 186px;
-  padding: 18px;
-  margin: 15px 0 18px;
-}
-.login-form-top {
-  margin-bottom: 22px;
-  display: flex;
-  flex-wrap: wrap;
-  i {
-    width: 36px;
-    height: 32px;
-    border: 1px solid #999;
-    background: url("./images/icons.png");
-    background-position: 550px 68px;
-    box-sizing: border-box;
-  }
-  input {
-    width: 302px;
-    height: 32px;
-    border: 1px solid #999;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    outline: none;
-  }
-}
-.login-form-bottom {
-  margin-bottom: 22px;
-  display: flex;
-  flex-wrap: wrap;
-  i {
-    width: 36px;
-    height: 32px;
-    border: 1px solid #999;
-    background: url("./images/icons.png");
-    background-position: 488px 68px;
-    box-sizing: border-box;
-  }
-  input {
-    width: 302px;
-    height: 32px;
-    border: 1px solid #999;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    outline: none;
-  }
-}
-.login-form-check {
-  display: flex;
-  justify-content: space-between;
-}
-.login-login-button {
-  width: 342px;
-  height: 32px;
-  background-color: #e1251b;
-  padding: 6px;
-  margin-top: 25px;
-  font-size: 16px;
-  color: #fff;
-  border: 0;
-  outline: none;
-}
-.login-login-register {
-  width: 342px;
-  height: 37px;
-  margin-top: 15px;
-  padding-right: 18px;
+      .login {
+        width: 1200px;
+        height: 487px;
+        margin: 0 auto;
+        background: url(./images/loginbg.png) no-repeat;
+      }
 
-  p {
-    font-size: 15px;
-    color: #666;
-    text-align: right;
+      .loginform {
+        width: 420px;
+        height: 406px;
+        box-sizing: border-box;
+        background: #fff;
+        float: right;
+        top: 45px;
+        position: relative;
+        padding: 20px;
+
+        .tab {
+
+          li {
+            width: 50%;
+            float: left;
+            text-align: center;
+
+            a {
+              width: 100%;
+              display: block;
+              height: 50px;
+              line-height: 50px;
+              font-size: 20px;
+              font-weight: 700;
+              color: #333;
+              border: 1px solid #ddd;
+              box-sizing: border-box;
+              text-decoration: none;
+
+            }
+
+            .current {
+              border-bottom: none;
+              border-top-color: #28a3ef;
+              color: #e1251b;
+            }
+          }
+        }
+
+        .content {
+          width: 380px;
+          height: 316px;
+          box-sizing: border-box;
+          border: 1px solid #ddd;
+          border-top: none;
+          padding: 18px;
+
+          form {
+            margin: 15px 0 18px 0;
+            font-size: 12px;
+            line-height: 18px;
+
+            .input-text {
+              margin-bottom: 16px;
+
+              span {
+                float: left;
+                width: 37px;
+                height: 32px;
+                border: 1px solid #ccc;
+                background: url(./images/icons.png) no-repeat -10px -201px;
+                box-sizing: border-box;
+                border-radius: 2px 0 0 2px;
+              }
+
+              .pwd {
+                background-position: -72px -201px;
+              }
+
+              input {
+                width: 302px;
+                height: 32px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-left: none;
+                float: left;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                font-size: 14px;
+                line-height: 22px;
+                padding-right: 8px;
+                padding-left: 8px;
+
+                border-radius: 0 2px 2px 0;
+                outline: none;
+              }
+            }
+
+            .setting {
+              label {
+                float: left;
+              }
+
+              .forget {
+                float: right;
+              }
+            }
+
+            .btn {
+              background-color: #e1251b;
+              padding: 6px;
+              border-radius: 0;
+              font-size: 16px;
+              font-family: 微软雅黑;
+              word-spacing: 4px;
+              border: 1px solid #e1251b;
+              color: #fff;
+              width: 100%;
+              height: 36px;
+              margin-top: 25px;
+              outline: none;
+            }
+          }
+
+          .call {
+            margin-top: 30px;
+
+            ul {
+              float: left;
+
+              li {
+                float: left;
+                margin-right: 5px;
+              }
+            }
+
+            .register {
+              float: right;
+              font-size: 15px;
+              line-height: 38px;
+            }
+
+            .register:hover {
+              color: #4cb9fc;
+              text-decoration: underline;
+            }
+          }
+
+        }
+      }
+    }
+
+    .copyright {
+      width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 24px;
+
+      ul {
+        li {
+          display: inline-block;
+          border-right: 1px solid #e4e4e4;
+          padding: 0 20px;
+          margin: 15px 0;
+        }
+      }
+    }
+
   }
-}
 </style>

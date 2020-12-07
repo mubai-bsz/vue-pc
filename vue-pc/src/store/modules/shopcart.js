@@ -50,8 +50,9 @@ export default {
 				return cart;
 			});
 		},
+		// 删除
 		DEL_CART(state, skuId) {
-      state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId)
+			state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId);
 		},
 	},
 };

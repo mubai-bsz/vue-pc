@@ -1,119 +1,270 @@
 <template>
-  <div class="register">
-    <div class="register-top">
-      <h3>注册新用户</h3>
-      <span>我有账号，去<a href="">登录</a></span>
-    </div>
+  <div class="register-container">
+    <!-- 注册内容 -->
+    <div class="register">
+      <h3>
+        注册新用户
+        <span class="go"
+          >我有账号，去 <a href="login.html" target="_blank">登陆</a>
+        </span>
+      </h3>
+      <div class="content">
+        <label>手机号:</label>
+        <ValidationProvider rules="required|length|phone" v-slot="{ errors }">
+          <input
+            type="text"
+            placeholder="请输入你的手机号"
+            v-model="user.phone"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
 
-    <form action="" class="register-from">
-      <div class="register-phong">
-        手&nbsp;&nbsp;机&nbsp;&nbsp;号:
-        <input type="text" name="user" placeholder="请输入手机号" />
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
-      <div class="Verification-code">
-        验&nbsp;&nbsp;证&nbsp;&nbsp;码:
-        <input
-          type="text"
-          name="Verification-code"
-          placeholder="请输入验证码"
-        />
-        <img src="" alt="" />
+      <div class="content">
+        <ValidationProvider rules="codeLength" v-slot="{ errors }">
+          <label>验证码:</label>
+          <input type="text" placeholder="请输入验证码" v-model="user.code" />
+          <img
+            @click="refresh"
+            ref="code"
+            src="http://182.92.128.115/api/user/passport/code"
+            alt="code"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
-      <div class="register-pass">
-        登录密码:
-        <input type="password" name="pass" placeholder="请输入你的登录密码" />
-      </div>
-      <div class="register-repeat-pass">
-        确认密码:
+      <div class="content">
+        <label>登录密码:</label>
         <input
           type="password"
-          name="repeat-pass"
-          placeholder="请输入确认密码"
+          placeholder="请输入你的登录密码"
+          v-model="user.password"
         />
+        <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
-    </form>
-    <div class="checkbox">
-      <input type="checkbox" />
-      同意协议并注册《尚品汇用户协议》
+      <div class="content">
+        <label>确认密码:</label>
+        <input
+          type="password"
+          placeholder="请输入确认密码"
+          v-model="user.rePassword"
+        />
+        <!-- <span class="error-msg">错误提示信息</span> -->
+      </div>
+      <div class="controls">
+        <input name="m1" type="checkbox" v-model="user.isAgree" />
+        <span>同意协议并注册《尚品汇用户协议》</span>
+        <!-- <span class="error-msg">错误提示信息</span> -->
+      </div>
+      <div class="btn">
+        <button @click="register">完成注册</button>
+      </div>
     </div>
-    <div class="register-finish">
-      <button>完成注册</button>
+
+    <!-- 底部 -->
+    <div class="copyright">
+      <ul>
+        <li>关于我们</li>
+        <li>联系我们</li>
+        <li>联系客服</li>
+        <li>商家入驻</li>
+        <li>营销中心</li>
+        <li>手机尚品汇</li>
+        <li>销售联盟</li>
+        <li>尚品汇社区</li>
+      </ul>
+      <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
+      <div class="beian">京ICP备19006430号</div>
     </div>
   </div>
 </template>
 
 <script>
+import { ValidationProvider, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+// 内置规则
+extend("required", {
+  ...required,
+  message: "手机号必须填写", //错误信息
+});
+
+// 自定义规则，手机号长度
+extend("length", {
+  validate(value) {
+    return value.length === 11;
+  },
+  message: "长度必须为11位",
+});
+// 手机号格式
+extend("phone", {
+  validate(value) {
+    return /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
+      value
+    );
+  },
+  message: "手机号不符合规范",
+});
+
+// 自定义规则，验证码长度
+extend("codeLength", {
+  validate(value) {
+    return value.length === 4;
+  },
+  message: "长度必须为4位",
+});
 export default {
   name: "Register",
+  data() {
+    return {
+      user: {
+        phone: "", // 手机号
+        password: "", // 密码
+        rePassword: "", // 确认密码
+        code: "", // 验证码
+        isAgree: false, // 同意
+      },
+    };
+  },
+  methods: {
+    register() {
+      // 1、收集表单数据，为了进行校验
+      const { password, rePassword, isAgree } = this.user;
+      // 2、进行正则校验
+      if (!isAgree) {
+        this.$message("请同意用户协议");
+        return;
+      }
+      if (password !== rePassword) {
+        this.$message("两次输入密码不一致");
+        return;
+      }
+      //3、发送请求注册
+    },
+    // 刷新验证码
+    refresh(e) {
+      e.target.src = "http://182.92.128.115/api/user/passport/code";
+    },
+  },
+  components: {
+    ValidationProvider,
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.register {
-  width: 1200px;
-  height: 445px;
-  border: 1px solid #999;
-  margin: 0 auto;
-}
-.register-top {
-  height: 30px;
-  padding: 6px 15px;
-  background-color: #ececec;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 900;
-  h3 {
-    font-size: 20px;
-  }
-  span {
-    font-size: 14px;
-    color: #333;
-    a {
-      color: #e1251b;
-    }
-    a:hover {
-      color: blue;
-      text-decoration: none;
-    }
-  }
-}
-.register-from {
-  width: 1200px;
-  text-align: center;
-  margin-top: 20px;
+.register-container {
+  .register {
+    width: 1200px;
+    height: 445px;
+    border: 1px solid rgb(223, 223, 223);
+    margin: 0 auto;
 
-  input {
-    width: 270px;
-    height: 38px;
-    margin: 10px 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-}
+    h3 {
+      background: #ececec;
+      margin: 0;
+      padding: 6px 15px;
+      color: #333;
+      border-bottom: 1px solid #dfdfdf;
+      font-size: 20.04px;
+      line-height: 30.06px;
 
-.register-phong {
-  margin-left: 5px;
-}
-.Verification-code {
-  margin-left: 5px;
-}
-.checkbox {
-  text-align: center;
-  margin-top: 5px;
-}
-.register-finish {
-  text-align: center;
-  margin-top: 20px;
-  button {
-    width: 270px;
-    height: 38px;
-    margin-left: 50px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #e1251b;
-    outline: none;
-    border: 0;
+      span {
+        font-size: 14px;
+        float: right;
+
+        a {
+          color: #e1251b;
+        }
+      }
+    }
+
+    div:nth-of-type(1) {
+      margin-top: 40px;
+    }
+
+    .content {
+      padding-left: 390px;
+      margin-bottom: 18px;
+      position: relative;
+
+      label {
+        font-size: 14px;
+        width: 96px;
+        text-align: right;
+        display: inline-block;
+      }
+
+      input {
+        width: 270px;
+        height: 38px;
+        padding-left: 8px;
+        box-sizing: border-box;
+        margin-left: 5px;
+        outline: none;
+        border: 1px solid #999;
+      }
+
+      img {
+        vertical-align: sub;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .controls {
+      text-align: center;
+      position: relative;
+
+      input {
+        vertical-align: middle;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .btn {
+      text-align: center;
+      line-height: 36px;
+      margin: 17px 0 0 55px;
+
+      button {
+        outline: none;
+        width: 270px;
+        height: 36px;
+        background: #e1251b;
+        color: #fff !important;
+        display: inline-block;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .copyright {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 24px;
+
+    ul {
+      li {
+        display: inline-block;
+        border-right: 1px solid #e4e4e4;
+        padding: 0 20px;
+        margin: 15px 0;
+      }
+    }
   }
 }
 </style>

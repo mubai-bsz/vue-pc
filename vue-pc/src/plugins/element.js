@@ -1,6 +1,6 @@
 import Vue from "vue";
-import {  Pagination, InputNumber } from "element-ui";
+import { Pagination, InputNumber, Message } from "element-ui";
 
 Vue.use(Pagination);
 Vue.use(InputNumber);
-// Vue.use(message);
+Vue.prototype.$message = Message;
