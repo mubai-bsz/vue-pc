@@ -3,6 +3,8 @@
 */
 import axios from "axios";
 import getUserTempId from "@utils/getUserTempId";
+// 这里的store既是vuex中的store，又是this.$store
+import store from "../store";
 // 引入进度条插件与进度条样式
 import NProgress from "nprogress";
 import "nprogress/nprogress";
@@ -24,6 +26,13 @@ instence.interceptors.request.use(
 
 		// 使用进度条插件,在请求开始前发送
 		NProgress.start();
+
+		// 修改config，添加公共的请求参数token,同时发送到后台，后台就会自动把userTempId转换成token，当用户请求时，在发送回去，是为了使用户在未登录时保存的数据可以同步到登录后用户id中，不至于丢失临时数据，这就是token的意义
+		const token = store.state.users.token;
+		if (token) {
+			config.headers.token = token;
+		}
+
 		// 在请求头上添加一个id
 		config.headers.userTempId = userTempId;
 		return config;
