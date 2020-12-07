@@ -5,8 +5,16 @@
         <div class="header-main">
           <div class="header-left">
             <p>尚品汇欢迎您！</p>
-            请<router-link to="/login">登录</router-link>
-            <router-link to="/register">免费注册</router-link>
+            <p v-if="$store.state.users.name">
+              <span>{{ $store.state.users.name }}</span>
+              &nbsp;
+              <button>退出</button>
+            </p>
+            <p v-else>
+              <span> 请</span>
+              <router-link to="/login">登录</router-link>
+              <router-link to="/register">免费注册</router-link>
+            </p>
           </div>
           <div class="header-right">
             <a href="###">我的订单</a>
