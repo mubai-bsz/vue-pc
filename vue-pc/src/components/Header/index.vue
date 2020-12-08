@@ -9,6 +9,7 @@
               <span>{{ $store.state.users.name }}</span>
               &nbsp;
               <button>退出</button>
+              <!-- <button @click="removeToken">退出</button> -->
             </p>
             <p v-else>
               <span> 请</span>
@@ -97,6 +98,9 @@ export default {
 
       this.$router.replace(location);
     },
+    // removeToken() {
+    //   this.$store.dispatch("logout", "token");
+    // },
   },
   mounted() {
     this.$bus.$on("clearKeyWord", () => {

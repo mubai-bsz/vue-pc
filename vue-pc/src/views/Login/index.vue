@@ -42,8 +42,7 @@
                     name="m1"
                     type="checkbox"
                     value="2"
-                  
-                    v-model="isAutoLoagin"
+                    v-model="isAutoLogin"
                   />
                   自动登录
                 </label>
@@ -99,15 +98,22 @@ export default {
         password: "",
       },
       isLoagining: false, //正在登录，防止在登录时点击多次
-      isAutoLoagin: true, //是否自动登录
+      isAutoLogin: true, //是否自动登录
     };
   },
   computed: {
     ...mapState({
       // 这里的数据是自动登录时使用的
-      token: (state) => state.user.token,
-      name: (state) => state.user.name,
+      token: (state) => state.users.token,
+      name: (state) => state.users.name,
     }),
+  },
+  // 在创建阶段进行自动登录，这个阶段结构以及加载好了
+  created() {
+    // 自动登录，判断是否有token，有就自动登录
+    // if (this.user.token) {
+    //   this.$router.replace("/");
+    // }
   },
   methods: {
     async submit() {
@@ -123,7 +129,6 @@ export default {
           localStorage.setItem("token", this.token);
           localStorage.setItem("name", this.name);
         }
-
         this.$router.replace("/");
       } catch {
         this.isLoagining = false;

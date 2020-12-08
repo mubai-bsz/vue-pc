@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import "../store";
 
 import Home from "../views/Home";
 import Login from "../views/Login";
@@ -12,6 +13,7 @@ import Center from "@views/Center";
 import Pay from "@views/Pay";
 import PaySuccess from "@views/PaySuccess";
 import Trade from "@views/Trade";
+import store from "../store";
 
 // 多次点击搜索按钮时会出现错误，根本原因是使用编程式导航触发了router中的promise方法，第一次点击触发返回then方法，第二次会触发catch方法
 // 解决方法：重新书写VueRouter实例上面的router中的push和replace方法
@@ -42,7 +44,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
 // 应用插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
 	routes: [
 		{
 			path: "/",
@@ -109,3 +111,29 @@ export default new VueRouter({
 		return { x: 0, y: 0 };
 	},
 });
+
+// 使用一个数组来定义路径
+const promiseRoute = ["/trade", "/pay", "/center"];
+router.beforeEach((to, from, next) => {
+	// 判断是否登录及去哪个页面,如果不登录，不允许去支付、订单等页面
+	// 是否登录可以依据token来判断，
+	// 先判断用户去哪个页面，如果是去需要权限的页面，那么就判断是否登录了，登录了就直接跳转到相关页面，如果没有登录就跳到登录页面
+	// 如果用户去的不是需要权限的页面，那么直接去即可
+	// if (promiseRoute.indexOf(to.path) > -1) {
+	// 	if (store.state.users.token) {
+	// 		next();
+	// 	} else {
+	// 		next("/login");
+	// 	}
+	// } else {
+	// 	next();
+	// }
+
+	// 上面代码优化
+	if (promiseRoute.indexOf(to.path) > -1 && !store.state.users.token) {
+		return next("/login");
+	}
+	next();
+});
+
+export default router;

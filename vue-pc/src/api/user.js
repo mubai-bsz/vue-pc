@@ -30,3 +30,12 @@ export const reqRegister = ({ phone, password, code }) => {
 		},
 	});
 };
+// 退出
+export const reqLogout = () => {
+	// 把request的结果返回出去，外面会接收到这个
+	// 并且会依据promise的返回值去判断成功还是失败
+	return request({
+		method: "GET",
+		url: "/user/passport/logout",
+	});
+};
