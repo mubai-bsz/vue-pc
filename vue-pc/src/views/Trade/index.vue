@@ -5,14 +5,18 @@
       <h5 class="receive">收件人信息</h5>
       <div
         class="address clearFix"
-        v-for="trade in trade.userAddressList"
-        :key="trade.id"
+        v-for="address in trade.userAddressList"
+        :key="address.id"
       >
-        <span class="username selected">{{ trade.consignee }}</span>
+        <span
+          :class="{ username: true, selected: address.id === selectAddressId }"
+          @click="selectAddressId = address.id"
+          >{{ address.consignee }}</span
+        >
         <p>
-          <span class="s1">{{ trade.userAddress }}</span>
-          <span class="s2">{{ trade.phoneNum }}</span>
-          <span class="s3">默认地址</span>
+          <span class="s1">{{ address.userAddress }}</span>
+          <span class="s2">{{ address.phoneNum }}</span>
+          <span class="s3" v-if="+address.isDefault">默认地址</span>
         </p>
       </div>
 
@@ -59,6 +63,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="orderComment"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -93,9 +98,9 @@
       </div>
       <div class="receiveInfo">
         寄送至:
-        <span>北京市昌平区宏福科技园综合楼6层</span>
-        收货人：<span>张三</span>
-        <span>15010658793</span>
+        <span>{{ selectAddress.userAddress }}</span>
+        收货人：<span>{{ selectAddress.consignee }}</span>
+        <span>{{ selectAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
@@ -111,16 +116,36 @@ export default {
   data() {
     return {
       trade: {},
+      // 设置默认id，数字是随便写的，可以是0，也可以是1，上面的address.id一开始并不知道，当下面的请求发送之后就知道了id，这时，就可以判断选择哪个了
       selectAddressId: -1,
+      orderComment: "",
     };
+  },
+  computed: {
+    // 使用计算属性来获取下面的地址以及其他的信息
+    selectAddress() {
+      // 这样写报错，原因是一开始的时候页面渲染时trade中是空对象
+      // Cannot read property 'userAddress' of undefined
+      // return this.trade.selectAddressList.find((address) => {
+      //   address.id === this.selectAddressId;
+      // });
+      // 正确的写法
+      const {
+        selectAddressId,
+        trade: { userAddressList },
+      } = this;
+      // 先看是否有 selectAddressList 这个值，如果有就执行下面的方法，没有就返回一个
+      return userAddressList
+        ? userAddressList.find((address) => address.id === selectAddressId)
+        : {};
+    },
   },
   async mounted() {
     const trade = await reqGetTrade();
     this.trade = trade;
-    // 获取默认地址
-    this.selectAddressId = trade.userAddressList.find(
-      (address) => address.isDefault === "1"
-    ).id;
+    this.selectAddressId = trade.userAddressList.find((address) => {
+      return address.isDefault === "1";
+    }).id;
   },
 };
 </script>
