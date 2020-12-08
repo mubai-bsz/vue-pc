@@ -7,3 +7,37 @@ export const reqGetTrade = () => {
 		url: "/order/auth/trade",
 	});
 };
+// 提交订单
+export const reqSubmitOrder = ({
+	tradeNo,
+	consignee,
+	consigneeTel,
+	deliveryAddress,
+	paymentWay,
+	orderComment,
+	orderDetailList,
+}) => {
+	return request({
+		method: "POST",
+		url: "/order/auth/submitOrder",
+		params: {
+			tradeNo,
+		},
+		data: {
+			// body参数
+			consignee,
+			consigneeTel,
+			deliveryAddress,
+			paymentWay,
+			orderComment,
+			orderDetailList,
+		},
+	});
+};
+// 二维码支付
+export const reqGetQRCode = (orderId) => {
+	return request({
+		method: "GET",
+		url: `/payment/weixin/createNative/${orderId}`,
+	});
+};
