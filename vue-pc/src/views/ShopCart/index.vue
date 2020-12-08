@@ -14,7 +14,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cart.isChecked" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @click="changeCart(cart.skuId, !cart.isChecked)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -116,9 +121,40 @@ export default {
         .filter((cart) => cart.isChecked === 1)
         .reduce((p, c) => p + c.skuNum * c.skuPrice, 0);
     },
+
+    // 全选，因为页面中商品全部都选中后，全选按钮也会被选中，而且，当全选按钮被选中时，上面的商品也会被选中，数据是双向流动的，所以使用v-model
+    checkAll: {
+      get() {
+        return (
+          this.cartList.length && this.totalCheckedNum === this.cartList.length
+        );
+      },
+      async set(newVal) {
+        this.cartList.forEach((cart) => {
+          this.updateCartCheck({
+            skuId: cart.skuId,
+            isChecked: +newVal,
+          });
+        });
+      },
+    },
+    // 计算复选框数量
+    totalCheckedNum() {
+      return this.cartList.reduce((p, c) => {
+        if (c.isChecked) {
+          return (p = p + 1);
+        }
+        return p;
+      }, 0);
+    },
   },
   methods: {
-    ...mapActions(["getCartList", "updateCartCount", "delCart"]),
+    ...mapActions([
+      "getCartList",
+      "updateCartCount",
+      "delCart",
+      "updateCartCheck",
+    ]),
     // 更新商品数量
     async updateCount(skuId, skuNum) {
       // 更新商品
@@ -126,8 +162,6 @@ export default {
       // 刷新页面,自动更新
       // this.getCartList();
     },
-    // 全选
-    checkAll() {},
 
     // 删除选中的商品
     delCarts(skuId) {
@@ -138,11 +172,16 @@ export default {
         this.delCart(skuId);
       }
     },
+    // 切换商品状态
+    changeCart(skuId, isChecked) {
+      isChecked = +isChecked;
+      this.updateCartCheck({ skuId, isChecked });
+    },
   },
   mounted() {
     this.getCartList();
   },
-};
+}; 
 </script>
 
 <style lang="less" scoped>

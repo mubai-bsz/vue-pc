@@ -21,21 +21,24 @@ export default {
 			await reqUpdateCartCount(skuId, skuNum);
 			commit("UPDATE_CART_COUNT", { skuId, skuNum });
 		},
-
+		// 切换商品状态
 		async updateCartCheck({ commit }, { skuId, isChecked }) {
 			// 发送请求，用来更新服务器数据
 			await reqUpdateCartCheck(skuId, isChecked);
-			console.log(commit);
+			commit("UPDATE_CART_CHECK", { skuId, isChecked });
 
 			// 更新数据的方法：
 			// 1、手动更新veux的数据，页面重新渲染，发的请求少一点
 			// 2、重新请求购物车的数据，发的请求多一些
 		},
-
+	
+		// 删除
 		async delCart({ commit }, skuId) {
 			await reqDelCart(skuId);
 			commit("DEL_CART", skuId);
 		},
+
+		// 全选
 	},
 	mutations: {
 		GET_CART_LIST(state, cartList) {
@@ -53,6 +56,14 @@ export default {
 		// 删除
 		DEL_CART(state, skuId) {
 			state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId);
+		},
+		// 切换状态
+		UPDATE_CART_CHECK(state, { skuId, isChecked }) {
+			state.cartList.forEach((cart) => {
+				if (cart.skuId === skuId) {
+					cart.isChecked = isChecked;
+				}
+			});
 		},
 	},
 };
