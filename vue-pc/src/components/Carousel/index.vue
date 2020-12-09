@@ -2,8 +2,10 @@
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="banner in carouselList" :key="banner.id">
-        <img v-lazy="banner.imgUrl" />
+        <img  :data-src="banner.imgUrl" class="swiper-lazy"/>
+        <!-- <img :src="banner.imgUrl" class="swiper-lazy-preloader"/> -->
         <!-- <img :src="banner.imgUrl" /> -->
+        <div class="swiper-lazy-preloader"></div>
       </div>
     </div>
     <!-- 如果需要分页器 -->
@@ -16,11 +18,11 @@
 </template>
 
 <script>
-import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+import Swiper, { Navigation, Pagination, Autoplay ,Lazy} from "swiper";
 
 // Swiper6默认只有核心轮播图功能，其他功能没有
 // 要使用其他功能，需要先加载
-Swiper.use([Navigation, Pagination, Autoplay]);
+Swiper.use([Navigation, Pagination, Autoplay,Lazy]);
 export default {
   name: "Carousel",
   props: {
@@ -50,6 +52,7 @@ export default {
       this.swiper = this.$nextTick(() => {
         new Swiper(this.$refs.swiper, {
           loop: true, // 循环模式选项
+          lazy : true,
           autoplay: {
             //自动轮播
             delay: 3000,
