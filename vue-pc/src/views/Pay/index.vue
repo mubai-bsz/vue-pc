@@ -100,7 +100,7 @@ export default {
   methods: {
     async submit() {
       const result = await reqGetQRCode(this.$route.query.orderId);
-      console.log(result);
+      // console.log(result);
       // codeUrl: "weixin://wxpay/bizpayurl?pr=8koPe8T00"  要把这个转化成二维码
       // 下包qrcde这个包
       QRCode.toDataURL(result.codeUrl)
@@ -121,6 +121,8 @@ export default {
                 type: "success",
                 message: "支付成功",
               });
+              // 跳转到成功界面
+              this.$router.push("paysuccess");
             })
             .catch(() => {
               this.$message({
