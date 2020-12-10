@@ -1,4 +1,4 @@
-import { reqRegister, reqLogin,  } from "@api/user";
+import { reqRegister, reqLogin, reqLogout } from "@api/user";
 export default {
 	state: {
 		// 在登录时需要name与token这两个值，保存在本地是为了做记用户名与密码和token，方便自动登录
@@ -18,18 +18,20 @@ export default {
 			commit("REQ_LOGIN", user);
 		},
 		// 退出
-		// async logout({ commit }) {
-		// 	await reqLogout();
-		// 	commit("REQ_LOGOUT");
-		// },
+		async logout({ commit }) {
+			await reqLogout();
+			commit("REQ_LOGOUT");
+		},
 	},
 	mutations: {
 		REQ_LOGIN(state, user) {
 			state.name = user.name;
 			state.token = user.token;
 		},
-		// REQ_LOGOUT() {
-		// 	localStorage.removeItem("token");
-		// },
+		REQ_LOGOUT(state) {
+			state.name = "";
+			localStorage.removeItem("token");
+			localStorage.removeItem("name");
+		},
 	},
 };

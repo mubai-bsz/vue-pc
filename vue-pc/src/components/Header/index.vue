@@ -8,8 +8,8 @@
             <p v-if="$store.state.users.name">
               <span>{{ $store.state.users.name }}</span>
               &nbsp;
-              <button>退出</button>
-              <!-- <button @click="removeToken">退出</button> -->
+              <!-- <button>退出</button> -->
+              <button @click="logouted">退出</button>
             </p>
             <p v-else>
               <span> 请</span>
@@ -98,9 +98,11 @@ export default {
 
       this.$router.replace(location);
     },
-    // removeToken() {
-    //   this.$store.dispatch("logout", "token");
-    // },
+    logouted() {
+      window.confirm("你确定要退出登录吗？");
+      this.$store.dispatch("logout");
+      this.$router.push("/login");
+    },
   },
   mounted() {
     this.$bus.$on("clearKeyWord", () => {

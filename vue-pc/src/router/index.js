@@ -21,18 +21,18 @@ import store from "../store";
 const Home = () => import(/* webpackChunkName: "Home" */ "../views/Home");
 const Login = () => import(/* webpackChunkName: "Login" */ "../views/Login");
 const Register = () =>
-	import(/* webpackChunkName: "Home" */ "../views/Register");
-const Search = () => import(/* webpackChunkName: "Home" */ "../views/Search");
-const Detail = () => import(/* webpackChunkName: "Home" */ "../views/Detail");
+	import(/* webpackChunkName: "Register" */ "../views/Register");
+const Search = () => import(/* webpackChunkName: "Search" */ "../views/Search");
+const Detail = () => import(/* webpackChunkName: "Detail" */ "../views/Detail");
 const AddCartSuccess = () =>
-	import(/* webpackChunkName: "Home" */ "../views/AddCartSuccess");
+	import(/* webpackChunkName: "AddCartSuccess" */ "../views/AddCartSuccess");
 const ShopCart = () =>
-	import(/* webpackChunkName: "Home" */ "../views/ShopCart");
-const Center = () => import(/* webpackChunkName: "Home" */ "../views/Center");
-const Pay = () => import(/* webpackChunkName: "Home" */ "../views/Pay");
+	import(/* webpackChunkName: "ShopCart" */ "../views/ShopCart");
+const Center = () => import(/* webpackChunkName: "Center" */ "../views/Center");
+const Pay = () => import(/* webpackChunkName: "Pay" */ "../views/Pay");
 const PaySuccess = () =>
-	import(/* webpackChunkName: "Home" */ "../views/PaySuccess");
-const Trade = () => import(/* webpackChunkName: "Home" */ "../views/Trade");
+	import(/* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
+const Trade = () => import(/* webpackChunkName: "Trade" */ "../views/Trade");
 
 // 多次点击搜索按钮时会出现错误，根本原因是使用编程式导航触发了router中的promise方法，第一次点击触发返回then方法，第二次会触发catch方法
 // 解决方法：重新书写VueRouter实例上面的router中的push和replace方法

@@ -11,10 +11,13 @@ import "nprogress/nprogress";
 
 // 使用UUID生成id
 const userTempId = getUserTempId();
-
+// console.log(process.env.NODE_ENV)  development   production
+const prefix_url =
+	process.env.NODE_ENV === "development" ? "/" : "http://182.92.128.115/";
 const instence = axios.create({
 	// 公共的基础路径
-	baseURL: "/api",
+	// baseURL: "/api",
+	baseURL: `${prefix_url}api`,
 	// /
 });
 
