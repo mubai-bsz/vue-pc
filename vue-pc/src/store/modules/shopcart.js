@@ -11,6 +11,7 @@ export default {
 		cartList: [],
 	},
 	getters: {},
+	// 购物车列表
 	actions: {
 		async getCartList({ commit }) {
 			const cartList = await reqGetCartList();
@@ -31,7 +32,7 @@ export default {
 			// 1、手动更新veux的数据，页面重新渲染，发的请求少一点
 			// 2、重新请求购物车的数据，发的请求多一些
 		},
-	
+
 		// 删除
 		async delCart({ commit }, skuId) {
 			await reqDelCart(skuId);

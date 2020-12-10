@@ -70,12 +70,18 @@
               </table>
             </div>
             <div class="orders">
-              <table class="order-item">
+              <table
+                class="order-item"
+                v-for="orderList in myOrder.records"
+                :key="orderList.id"
+              >
                 <thead>
                   <tr>
                     <th colspan="5">
                       <span class="ordertitle"
-                        >2017-02-11 11:59订单编号：7867473872181848
+                        >{{ orderList.createTime }} 订单编号：{{
+                          orderList.outTradeNo
+                        }}
                         <span class="pull-right delete"
                           ><img src="./images/delete.png" /></span
                       ></span>
@@ -83,29 +89,63 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr
+                    v-for="(detailList, index) in orderList.orderDetailList"
+                    :key="detailList.id"
+                  >
                     <td width="60%">
                       <div class="typographic">
-                        <img src="./images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
+                        <img style="width: 150px" :src="detailList.imgUrl" />
+                        <a href="#" class="block-text">{{
+                          detailList.skuName
+                        }}</a>
+                        <span>x{{ detailList.skuNum }}</span>
                         <a href="#" class="service">售后申请</a>
                       </div>
                     </td>
-                    <td rowspan="2" width="8%" class="center">小丽</td>
-                    <td rowspan="2" width="13%" class="center">
+                    <td
+                      :rowspan="orderList.orderDetailList.length"
+                      width="8%"
+                      :class="{
+                        center: true,
+                        display: index >= 1 ? true : false,
+                      }"
+                    >
+                      {{ orderList.consignee }}
+                    </td>
+                    <td
+                      :rowspan="orderList.orderDetailList.length"
+                      width="13%"
+                      :class="{
+                        center: true,
+                        display: index >= 1 ? true : false,
+                      }"
+                    >
                       <ul class="unstyled">
-                        <li>总金额¥138.00</li>
+                        <li>总金额¥{{ orderList.totalAmount }}</li>
                         <li>在线支付</li>
                       </ul>
                     </td>
-                    <td rowspan="2" width="8%" class="center">
-                      <a href="#" class="btn">已完成 </a>
+                    <td
+                      :rowspan="orderList.orderDetailList.length"
+                      width="8%"
+                      :class="{
+                        center: true,
+                        display: index >= 1 ? true : false,
+                      }"
+                    >
+                      <a href="#" class="btn"
+                        >{{ orderList.orderStatusName }}
+                      </a>
                     </td>
-                    <td rowspan="2" width="13%" class="center">
+                    <td
+                      :rowspan="orderList.orderDetailList.length"
+                      width="13%"
+                      :class="{
+                        center: true,
+                        display: index >= 1 ? true : false,
+                      }"
+                    >
                       <ul class="unstyled">
                         <li>
                           <a href="mycomment.html" target="_blank">评价|晒单</a>
@@ -113,50 +153,15 @@
                       </ul>
                     </td>
                   </tr>
-                  <tr>
-                    <td width="50%">
-                      <div class="typographic">
-                        <img src="./images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
-                        <a href="#" class="service">售后申请</a>
-                      </div>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
-            <div class="choose-order">
-              <div class="pagination">
-                <ul>
-                  <li class="prev disabled">
-                    <a href="javascript:">«上一页</a>
-                  </li>
-                  <li class="page actived">
-                    <a href="javascript:">1</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">2</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">3</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">4</a>
-                  </li>
-
-                  <li class="next disabled">
-                    <a href="javascript:">下一页»</a>
-                  </li>
-                </ul>
-                <div>
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;共2页&nbsp;</span>
-                </div>
-              </div>
-            </div>
+            <!-- 分页器 -->
+            <Pagination
+              :total="myOrder.total"
+              :currnet-page="myOrder.current"
+             
+            />
           </div>
           <!--猜你喜欢-->
           <div class="like">
@@ -221,11 +226,38 @@
 </template>
 
 <script>
-import { reqGetMyOrder } from "@api/pay";
+import { mapActions, mapState } from "vuex";
+import Pagination from "@comps/Pagination";
 export default {
-  name: "",
+  name: "Center",
+  data() {
+    return {
+      page: "1",
+      limit: "5",
+    };
+  },
+  methods: {
+    ...mapActions(["getMyOrder"]),
+  },
+  watch:{
+     // 每次改变页面时更新数据
+    myCurrentPage(currentPage) {
+      this.$emit("current-change", currentPage);
+    },
+  },
+  computed: {
+    // 这里使用计算属性来计算订单的数据
+    ...mapState({
+      myOrder: (state) => state.myorder.myOrder,
+    }),
+  },
   mounted() {
-    reqGetMyOrder();
+    const { page, limit } = this;
+    this.getMyOrder({ page, limit });
+    // console.log(this);
+  },
+  components: {
+    Pagination,
   },
 };
 </script>
@@ -369,6 +401,9 @@ export default {
 
                 &.center {
                   text-align: center;
+                }
+                &.display {
+                  display: none;
                 }
 
                 .typographic {
