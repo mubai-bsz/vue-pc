@@ -160,7 +160,7 @@
             <Pagination
               :total="myOrder.total"
               :currnet-page="myOrder.current"
-             
+              @current-change="myOrderList"
             />
           </div>
           <!--猜你喜欢-->
@@ -238,13 +238,13 @@ export default {
   },
   methods: {
     ...mapActions(["getMyOrder"]),
-  },
-  watch:{
-     // 每次改变页面时更新数据
-    myCurrentPage(currentPage) {
-      this.$emit("current-change", currentPage);
+    // 这个方法在点击页面的时候触发，并且会重新请求数据，需要参数，参数是根据点击页面的时候会发生改变，动态的数据
+    // 怎么获取呢？
+    myOrderList(page = 1, limit = 5) {
+      this.getMyOrder({ page, limit });
     },
   },
+
   computed: {
     // 这里使用计算属性来计算订单的数据
     ...mapState({
